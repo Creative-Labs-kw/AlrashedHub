@@ -1,11 +1,22 @@
-import { Image, StyleSheet, Text, View, ViewBase } from "react-native";
-import Colors from "../constants/Colors";
+import Colors from "@/constants/Colors";
+import { Product } from "@/types";
+import { Image, StyleSheet, Text, View } from "react-native";
 
+// to be safe id no image and remove the ts error
+export const defaultPizzaImage =
+  "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
+
+type ProductListItemProps = {
+  product: Product;
+};
 // object getting it from the dummy data / destruct it and use it
-export const ProductListItem = ({ product }) => {
+export const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{ uri: product.image }} />
+      <Image
+        style={styles.image}
+        source={{ uri: product.image || defaultPizzaImage }} //use first img if u don't find it use the default one
+      />
       <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.title}>${product.price}</Text>
     </View>
