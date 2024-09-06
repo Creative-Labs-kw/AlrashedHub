@@ -15,6 +15,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
     <View style={styles.container}>
       <Image
         style={styles.image}
+        resizeMode="contain" //make sure the img all if it appear inside
         source={{ uri: product.image || defaultPizzaImage }} //use first img if u don't find it use the default one
       />
       <Text style={styles.title}>{product.name}</Text>
@@ -24,12 +25,16 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
 };
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
+    flex: 1,
     backgroundColor: "#fff",
     padding: 10, // size inside the container
     borderRadius: 5,
+    shadowColor: "#000", // Color of the shadow
+    shadowOffset: { width: 0, height: 2 }, // Offset of the shadow
+    shadowOpacity: 0.25, // Opacity of the shadow
+    shadowRadius: 3.5, // Radius of the shadow
+    elevation: 5, // Android shadow effect
+    maxWidth: "50%", // if you have item alone don't let it take all the size(from the flex)
   },
   title: {
     fontSize: 18,
