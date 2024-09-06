@@ -1,6 +1,7 @@
 import Colors from "@/constants/Colors";
 import { Product } from "@/types";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Link } from "expo-router";
+import { Image, Pressable, StyleSheet, Text } from "react-native";
 
 // to be safe id no image and remove the ts error
 export const defaultPizzaImage =
@@ -12,15 +13,17 @@ type ProductListItemProps = {
 // object getting it from the dummy data / destruct it and use it
 export const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.image}
-        resizeMode="contain" //make sure the img all if it appear inside
-        source={{ uri: product.image || defaultPizzaImage }} //use first img if u don't find it use the default one
-      />
-      <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.title}>${product.price}</Text>
-    </View>
+    <Link href={`/menu/${product.id}`} asChild>
+      <Pressable onPress={() => {}} style={styles.container}>
+        <Image
+          style={styles.image}
+          resizeMode="contain" //make sure the img all if it appear inside
+          source={{ uri: product.image || defaultPizzaImage }} //use first img if u don't find it use the default one
+        />
+        <Text style={styles.title}>{product.name}</Text>
+        <Text style={styles.title}>${product.price}</Text>
+      </Pressable>
+    </Link>
   );
 };
 const styles = StyleSheet.create({
