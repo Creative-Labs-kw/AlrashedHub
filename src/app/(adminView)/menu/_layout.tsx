@@ -45,30 +45,6 @@ const MenuStack = () => {
           ),
         }}
       />
-
-      {/* Product editing screen */}
-      <Stack.Screen
-        name="[productId]"
-        options={{
-          title: "Edit Product",
-          headerRight: () => (
-            <View style={styles.headerIconsContainer}>
-              <Link href="/" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="pencil"
-                      size={25}
-                      color={Colors.light.tint}
-                      style={{ opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
-            </View>
-          ),
-        }}
-      />
     </Stack>
   );
 };
