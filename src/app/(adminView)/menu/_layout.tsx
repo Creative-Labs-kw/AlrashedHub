@@ -29,7 +29,7 @@ const MenuStack = () => {
                 </Pressable>
               </Link>
               {/* Create screen */}
-              <Link href="/" asChild>
+              <Link href="/menu/createItem" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
