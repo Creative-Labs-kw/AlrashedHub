@@ -16,6 +16,11 @@ const Index = () => {
           <Text style={styles.buttonText}>Admin</Text>
         </TouchableOpacity>
       </Link>
+      <Link href={"/sign-in"} asChild>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Sign-in</Text>
+        </TouchableOpacity>
+      </Link>
     </View>
   );
 };

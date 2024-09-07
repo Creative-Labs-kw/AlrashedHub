@@ -3,12 +3,11 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  TextInputProps,
   StyleSheet,
+  TextInputProps,
 } from "react-native";
 import React, { useState } from "react";
-import { defaultPizzaImage } from "@/components/ProductListItem";
+import { FontAwesome } from "@expo/vector-icons";
 
 interface CustomInputProps {
   title: string;
@@ -19,6 +18,7 @@ interface CustomInputProps {
   TextMoreStyle?: any; // Additional text style
   placeHolder?: string;
   required?: boolean;
+  iconName?: string; // New prop for FontAwesome icon name
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -30,6 +30,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   TextMoreStyle,
   placeHolder,
   required = false,
+  iconName, // Use the iconName prop
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -42,22 +43,25 @@ const CustomInput: React.FC<CustomInputProps> = ({
         <TextInput
           style={styles.textInput}
           placeholder={placeHolder}
-          placeholderTextColor={"white"}
+          placeholderTextColor={"#D3D3D3"}
           value={value}
           onChangeText={handelChangeText}
           secureTextEntry={title === "Password" && !showPassword}
           keyboardType={keyBoardType}
         />
-        {title === "Password" && (
+        {iconName && (
           <TouchableOpacity
             onPress={() => {
-              setShowPassword(!showPassword);
+              if (title === "Password") {
+                setShowPassword(!showPassword);
+              }
             }}
           >
-            <Image
-              resizeMode="contain"
+            <FontAwesome
+              name={iconName}
+              size={24}
+              color="#808080"
               style={styles.icon}
-              source={{ uri: defaultPizzaImage }}
             />
           </TouchableOpacity>
         )}
@@ -81,18 +85,18 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
-    height: 64,
+    height: 50,
     paddingHorizontal: 16,
-    backgroundColor: "#3498db", // Equivalent to primary color
+    backgroundColor: "#fff", // Equivalent to primary color
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#E0E0E0", // Example of light black border color
+    borderColor: "#000", // Example of light black border color
     flexDirection: "row",
     alignItems: "center",
   },
   textInput: {
     flex: 1,
-    color: "white",
+    color: "#000",
     fontFamily: "Poppins-SemiBold",
     fontSize: 14,
   },
