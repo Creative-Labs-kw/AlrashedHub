@@ -36,9 +36,7 @@ const ProductDetailsScreen = () => {
   return (
     <View style={style.container}>
       {/* Sets the title of the screen dynamically based on the product name */}
-      <Stack.Screen
-        options={{ title: "ProductDetailsScreen" + " " + chosenProduct.name }}
-      />
+      <Stack.Screen options={{ title: chosenProduct.name }} />
 
       {/* Displays the product image */}
       <Image

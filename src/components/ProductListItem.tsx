@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import { Product } from "@/types";
-import { Link } from "expo-router";
+import { Link, useSegments } from "expo-router";
 import { Image, Pressable, StyleSheet, Text } from "react-native";
 
 // to be safe id no image and remove the ts error
@@ -12,8 +12,11 @@ type ProductListItemProps = {
 };
 // object getting it from the dummy data / destruct it and use it
 export const ProductListItem = ({ product }: ProductListItemProps) => {
+  //+ check where the path u on it or who is here user or admin
+  const segments = useSegments();
+
   return (
-    <Link href={`/menu/${product.id}`} asChild>
+    <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
       <Pressable onPress={() => {}} style={styles.container}>
         <Image
           style={styles.image}
