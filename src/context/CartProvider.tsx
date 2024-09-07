@@ -9,6 +9,7 @@ type CartType = {
   items: CartItem[];
   AddItemToCart: (product: Product) => void;
   updateQuantity: (itemId: string, amount: -1 | 1) => void;
+  total: number;
 };
 // 1  custom context from the function form react
 const CartContext = createContext<CartType>({
@@ -16,13 +17,14 @@ const CartContext = createContext<CartType>({
   items: [],
   AddItemToCart: () => {},
   updateQuantity: () => {},
+  total: 0,
 });
 
 // 2
 const CartProvider = ({ children }: PropsWithChildren) => {
   // hold the items
   const [items, setItems] = useState<CartItem[]>([]);
-  //   addItemToCart func
+  //+   addItemToCart func
   const AddItemToCart = (product: Product) => {
     // find the item that been added to the cart is = product chosen
     const existingItem = items.find((item) => item.product == product);
@@ -43,7 +45,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     setItems([newCartItem, ...items]);
   };
 
-  //   Add updateQuantity
+  //+   Add updateQuantity
   const updateQuantity = (itemId: string, amount: -1 | 1) => {
     // Create a new array of items with updated quantities
     setItems(
@@ -58,8 +60,17 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         .filter((item) => item.quantity > 0) //! if it less then 0 remove it
     );
   };
+
+  //+   To make the sum total
+  const total = items.reduce(
+    (sum, item) => (sum += item.product.price * item.quantity),
+    0
+  );
+
   return (
-    <CartContext.Provider value={{ items, AddItemToCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{ items, AddItemToCart, updateQuantity, total }}
+    >
       {children}
     </CartContext.Provider>
   );
