@@ -1,17 +1,15 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import React, { useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
-import products from "@assets/data/products";
-import { defaultPizzaImage } from "@/components/ProductListItem";
 import CustomButton from "@/components/Buttons/CustomButton";
-
-const sizes = ["S", "M", "L"];
+import { defaultPizzaImage } from "@/components/ProductListItem";
+import { useCart } from "@/context/CartProvider";
+import products from "@assets/data/products";
+import { Stack, useLocalSearchParams } from "expo-router";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 const ProductDetailsScreen = () => {
-  const [SizeSelection, setSizeSelection] = useState("M"); // State to track selected size
   const [isSubmitting, setIsSubmitting] = useState(false); // Boolean state for loading
   const { productId } = useLocalSearchParams(); // Retrieves the productId from the route parameters
-
+  const { items, AddItemToCart } = useCart();
   // Finds the product that matches the productId
   const chosenProduct = products.find((p) => p.id.toString() === productId);
 
@@ -28,7 +26,8 @@ const ProductDetailsScreen = () => {
   const handleSubmit = () => {
     setIsSubmitting(true); // Start loading state
     setTimeout(() => {
-      console.log("Product added to cart");
+      // add items to cart with chosen product
+      AddItemToCart(chosenProduct);
       setIsSubmitting(false); // End loading state after the action is simulated
     }, 2000); // Simulate a delay of 2 seconds (e.g., simulating a network request)
   };
@@ -48,25 +47,6 @@ const ProductDetailsScreen = () => {
 
       {/* Displays the product price */}
       <Text style={style.price}>${chosenProduct.price}</Text>
-
-      {/* Renders available size options and handles size selection */}
-      {sizes.map((size) => (
-        <Text
-          key={size}
-          onPress={() => {
-            setSizeSelection(size); // Update the size selection state
-          }}
-          style={[
-            // List of styles
-            style.size,
-            {
-              backgroundColor: SizeSelection === size ? "gainsboro" : "#fff", // Changes background color based on the selected size
-            },
-          ]}
-        >
-          {size}
-        </Text>
-      ))}
 
       {/* CustomButton handles the "Add to Cart" action, displays loading state when submitting */}
       <CustomButton
@@ -93,10 +73,5 @@ const style = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  size: {
-    margin: 2,
-    fontSize: 20,
-    borderRadius: 3,
   },
 });

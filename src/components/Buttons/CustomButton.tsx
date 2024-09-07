@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: "row", // Ensure that the ActivityIndicator is inline with the text
   },
   buttonText: {
-    color: "#0ea5e9", // Equivalent to Tailwind's text-primary
+    color: "#fff", // Equivalent to Tailwind's text-primary
     fontWeight: "600", // Equivalent to font-psemibold
     fontSize: 18, // Equivalent to text-lg
   },
