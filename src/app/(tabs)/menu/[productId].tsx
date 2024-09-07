@@ -2,7 +2,7 @@ import CustomButton from "@/components/Buttons/CustomButton";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import { useCart } from "@/context/CartProvider";
 import products from "@assets/data/products";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -28,6 +28,7 @@ const ProductDetailsScreen = () => {
     setTimeout(() => {
       // add items to cart with chosen product
       AddItemToCart(chosenProduct);
+      router.push("/cart");
       setIsSubmitting(false); // End loading state after the action is simulated
     }, 2000); // Simulate a delay of 2 seconds (e.g., simulating a network request)
   };
