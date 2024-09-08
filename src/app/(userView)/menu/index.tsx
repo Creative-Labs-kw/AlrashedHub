@@ -1,4 +1,4 @@
-import useProductList from "@/api/products";
+import { useProductList } from "@/api/products";
 import { ProductListItem } from "@/components/ProductListItem";
 import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";

@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 
 // This HOOK for Fetching ALL Products
-const useProductList = () => {
+export const useProductList = () => {
   return useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -14,5 +14,20 @@ const useProductList = () => {
     },
   });
 };
-
-export default useProductList;
+// get by id
+export const useProductById = (productId: string | string[]) => {
+  return useQuery({
+    queryKey: ["products", productId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", productId)
+        .single(); // take first product and return it as object
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    },
+  });
+};

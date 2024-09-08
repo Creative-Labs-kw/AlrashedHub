@@ -1,3 +1,4 @@
+import { useProductById } from "@/api/products";
 import CustomButton from "@/components/Buttons/CustomButton";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import Colors from "@/constants/Colors";
@@ -6,22 +7,26 @@ import products from "@assets/data/products";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const ProductDetailsScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Boolean state for loading
   const { productId } = useLocalSearchParams(); // Retrieves the productId from the route parameters
   const { items, AddItemToCart } = useCart();
-  // Finds the product that matches the productId
-  const chosenProduct = products.find((p) => p.id.toString() === productId);
+  const { data: chosenProduct, error, isLoading } = useProductById(productId);
 
-  // To handle the case where the product is not found
-  if (!chosenProduct) {
-    return (
-      <View>
-        <Text>No Product Found</Text>
-      </View>
-    );
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error) {
+    return <Text>Failed to fetch Products</Text>;
   }
 
   // Handles the button press, simulates adding the product to the cart with a delay
