@@ -1,7 +1,7 @@
 import { FlatList } from "react-native";
-import orders from "../../../../assets/data/orders";
 import { Stack } from "expo-router";
 import OrderListItem from "@/components/Lists/OrderListItem";
+import orders from "@assets/data/orders";
 
 const OrdersScreen = () => {
   return (
