@@ -12,7 +12,7 @@ import { supabase } from "@/lib/supabase";
 
 //  For testing this should be the "Welcome Screen"
 const Index = () => {
-  const { session, error, loading } = useAuth();
+  const { session, error, loading, isAdmin } = useAuth();
 
   // if loading
   if (loading) {
@@ -32,6 +32,10 @@ const Index = () => {
     return <Redirect href={"/sign-in"} />;
   }
 
+  // if he not admin
+  if (!isAdmin) {
+    return <Redirect href={"/(userView)"} />;
+  }
   return (
     <View style={styles.container}>
       <Link href={"/(userView)"} asChild>
@@ -44,11 +48,11 @@ const Index = () => {
           <Text style={styles.buttonText}>Admin</Text>
         </TouchableOpacity>
       </Link>
-      <Link href={"/sign-in"} asChild>
+      {/* <Link href={"/sign-in"} asChild>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Sign-in</Text>
         </TouchableOpacity>
-      </Link>
+      </Link> */}
       <Link href={"/"} asChild>
         <TouchableOpacity style={styles.button}>
           <Text onPress={() => supabase.auth.signOut} style={styles.buttonText}>
