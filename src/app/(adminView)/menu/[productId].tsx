@@ -3,7 +3,6 @@ import CustomButton from "@/components/Buttons/CustomButton";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import Colors from "@/constants/Colors";
 import { useCart } from "@/context/CartProvider";
-import products from "@assets/data/products";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";

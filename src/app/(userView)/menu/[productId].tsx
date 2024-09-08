@@ -2,7 +2,6 @@ import { useProductById } from "@/api/products";
 import CustomButton from "@/components/Buttons/CustomButton";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import { useCart } from "@/context/CartProvider";
-import products from "@assets/data/products";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
