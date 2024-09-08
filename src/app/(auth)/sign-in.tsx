@@ -1,14 +1,29 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import React, { useState } from "react";
-import Colors from "../../constants/Colors";
-import { Link, Stack } from "expo-router";
 import CustomButton from "@/components/Buttons/CustomButton";
 import CustomInput from "@/components/Forms/CustomInput";
+import { supabase } from "@/lib/supabase";
+import { Link, Stack } from "expo-router";
+import React, { useState } from "react";
+import { Alert, StyleSheet, View } from "react-native";
+import Colors from "../../constants/Colors";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const signInWithEmail = async () => {
+    setLoading(true);
+    // take the error from the function
+    const { error } = await supabase.auth.signInWithPassword({
+      // add options to make the function work
+      email,
+      password,
+    });
+    if (error) {
+      Alert.alert(error.message);
+    }
+    setLoading(false);
+  };
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Sign in" }} />
@@ -29,10 +44,8 @@ const SignInScreen = () => {
         iconName="lock"
       />
       <CustomButton
-        handelPress={() => {
-          console.log("pressed");
-        }}
-        title="Sign in"
+        handelPress={signInWithEmail}
+        title={loading ? "sign in ..." : "Sign in"}
       />
       <Link href="/sign-up" style={styles.textButton}>
         Create an account

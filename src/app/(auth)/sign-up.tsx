@@ -1,13 +1,28 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import React, { useState } from "react";
 import Colors from "../../constants/Colors";
 import { Link, Stack } from "expo-router";
 import CustomButton from "@/components/Buttons/CustomButton";
+import { supabase } from "@/lib/supabase";
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const signUpWithEmail = async () => {
+    setLoading(true);
+    // take the error from the function
+    const { error } = await supabase.auth.signUp({
+      // add options to make the function work
+      email,
+      password,
+    });
+    if (error) {
+      Alert.alert(error.message);
+    }
+    setLoading(false);
+  };
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Sign up" }} />
@@ -30,10 +45,9 @@ const SignUpScreen = () => {
       />
 
       <CustomButton
-        handelPress={() => {
-          console.log("press");
-        }}
-        title="Create account"
+        handelPress={signUpWithEmail}
+        title={loading ? "Creating..." : "Create account"} //nice to let user wait
+        disabled={loading} //avoid multi clicking
       />
       <Link href="/sign-in" style={styles.textButton}>
         Sign in
