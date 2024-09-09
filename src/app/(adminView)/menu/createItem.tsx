@@ -6,6 +6,7 @@ import { defaultPizzaImage } from "@/components/ProductListItem";
 import * as ImagePicker from "expo-image-picker";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
+  useDeleteProduct,
   useInsertProduct,
   useProductById,
   useUpdateProduct,
@@ -26,6 +27,8 @@ const CreateProductScreen = () => {
   const { mutate: updateProduct } = useUpdateProduct();
   // Call the mutate func to get productById from the DB
   const { data: updatingProduct } = useProductById(productId);
+  //  Call Delete:
+  const { mutate: deleteProduct } = useDeleteProduct();
 
   useEffect(() => {
     if (updatingProduct) {
@@ -53,7 +56,7 @@ const CreateProductScreen = () => {
     return true;
   };
 
-  const restFields = () => {
+  const resetFields = () => {
     setName("");
     setPrice("");
   };
@@ -70,7 +73,7 @@ const CreateProductScreen = () => {
       },
       {
         onSuccess: () => {
-          restFields();
+          resetFields();
           router.back();
         },
       }
@@ -89,7 +92,7 @@ const CreateProductScreen = () => {
       },
       {
         onSuccess: () => {
-          restFields();
+          resetFields();
           router.back();
         },
       }
@@ -132,7 +135,12 @@ const CreateProductScreen = () => {
 
   // Delete / and check deleting:
   const onDelete = () => {
-    console.warn("delete");
+    deleteProduct(productId, {
+      onSuccess: () => {
+        resetFields();
+        router.replace("/(adminView)");
+      },
+    });
   };
   const confirmDelete = () => {
     // make a question box before deleting

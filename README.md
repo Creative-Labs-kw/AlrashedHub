@@ -12,3 +12,4 @@
 - to add to the table rows > table editor new row
 - the Policies auto nobody can do nothing
 - to change the Policies to users to use CRUD og to > table Editor>click on the table > view Policies
+- to check ready API function , go to Table in the site > API
