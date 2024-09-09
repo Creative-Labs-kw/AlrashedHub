@@ -4,7 +4,7 @@ import CustomButton from "@/components/Buttons/CustomButton";
 import CustomInput from "@/components/Forms/CustomInput";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import * as ImagePicker from "expo-image-picker";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useInsertProduct } from "@/api/products";
 
 // Create Product screen(CreateItemScreen)
@@ -45,12 +45,19 @@ const CreateProductScreen = () => {
     if (!validateInputs()) {
       return; //stop here
     }
-    insertProduct({
-      name,
-      image,
-      price: parseFloat(price), //make it number
-    });
-    restFields();
+    insertProduct(
+      {
+        name,
+        image,
+        price: parseFloat(price), //make it number
+      },
+      {
+        onSuccess: () => {
+          restFields();
+          router.back();
+        },
+      }
+    );
   };
   const onUpdateProduct = () => {
     if (!validateInputs()) {
