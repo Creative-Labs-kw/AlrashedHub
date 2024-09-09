@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 // This HOOK for Fetching ALL Products
 export const useProductList = () => {
@@ -28,6 +28,26 @@ export const useProductById = (productId: string | string[]) => {
         throw new Error(error.message);
       }
       return data;
+    },
+  });
+};
+
+// hook to create or insert ROW in the DB(Changing in DB use Mutation)
+export const useInsertProduct = () => {
+  return useMutation({
+    async mutationFn(data: any) {
+      const { error, data: newProduct } = await supabase
+        .from("products")
+        .insert({
+          name: data.name,
+          image: data.image,
+          price: data.price,
+        })
+        .single();
+      if (error) {
+        throw new Error(error.message);
+      }
+      return newProduct;
     },
   });
 };

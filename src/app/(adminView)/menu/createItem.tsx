@@ -5,6 +5,7 @@ import CustomInput from "@/components/Forms/CustomInput";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { useInsertProduct } from "@/api/products";
 
 // Create Product screen(CreateItemScreen)
 const CreateProductScreen = () => {
@@ -15,6 +16,8 @@ const CreateProductScreen = () => {
   const { productId } = useLocalSearchParams();
   const isUpdating = !!productId; // Check if we are updating an existing product based on whether a productId is provided
 
+  // Call the mutate func to create or insert to the DB
+  const { mutate: insertProduct } = useInsertProduct();
   const validateInputs = () => {
     setErrorMsg(""); // reset it
     if (!name) {
@@ -42,7 +45,11 @@ const CreateProductScreen = () => {
     if (!validateInputs()) {
       return; //stop here
     }
-    console.warn("creating product: ", name);
+    insertProduct({
+      name,
+      image,
+      price: parseFloat(price), //make it number
+    });
     restFields();
   };
   const onUpdateProduct = () => {
@@ -89,7 +96,7 @@ const CreateProductScreen = () => {
 
   // Delete / and check deleting:
   const onDelete = () => {
-    console.warn("deletet");
+    console.warn("delete");
   };
   const confirmDelete = () => {
     // make a question box before deleting
