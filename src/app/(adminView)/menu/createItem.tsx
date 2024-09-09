@@ -135,13 +135,21 @@ const CreateProductScreen = () => {
 
   // Delete / and check deleting:
   const onDelete = () => {
+    if (!productId) {
+      console.error("Product ID is undefined or null");
+      return;
+    }
     deleteProduct(productId, {
       onSuccess: () => {
         resetFields();
         router.replace("/(adminView)");
       },
+      onError: (error) => {
+        console.error("Error deleting product:", error);
+      },
     });
   };
+
   const confirmDelete = () => {
     // make a question box before deleting
     Alert.alert("Confirm", "Are you sure?", [
