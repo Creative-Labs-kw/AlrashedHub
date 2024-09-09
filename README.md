@@ -13,3 +13,5 @@
 - the Policies auto nobody can do nothing
 - to change the Policies to users to use CRUD og to > table Editor>click on the table > view Policies
 - to check ready API function , go to Table in the site > API
+- after finish the tables in DB you can Download the types from the site OR in CLI 0454 in video
+- # by running the same code in terminal after changing table update the type file

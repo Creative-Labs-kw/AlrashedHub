@@ -1,10 +1,12 @@
 // this for passing values into all app if used as hook(Provider & Consumer)
 // must use Provider surrounds all screens(children) or whatever component so they can us the values
 // use Context hook is to get all the value on other files
-import { CartItem, Product } from "@/types";
+import { Tables } from "@/database.types";
+import { CartItem } from "@/types";
 import * as Crypto from "expo-crypto";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
+type Product = Tables<"products">;
 type CartType = {
   items: CartItem[];
   AddItemToCart: (product: Product) => void;

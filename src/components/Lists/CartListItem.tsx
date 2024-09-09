@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { CartItem } from "@/types";
 import { useCart } from "@/context/CartProvider";
-import { defaultPizzaImage } from "../ProductListItem";
+import { defaultPizzaImage } from "./ProductListItem";
 import Colors from "@/constants/Colors";
 
 type CartListItemProps = {

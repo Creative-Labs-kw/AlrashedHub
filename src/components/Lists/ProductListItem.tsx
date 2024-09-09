@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { Product } from "@/types";
+import { Tables } from "@/database.types";
 import { Link, useSegments } from "expo-router";
 import { Image, Pressable, StyleSheet, Text } from "react-native";
 
@@ -8,7 +8,7 @@ export const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
 type ProductListItemProps = {
-  product: Product;
+  product: Tables<"products">; // take the type from th DB using the HELPER
 };
 // object getting it from the dummy data / destruct it and use it
 export const ProductListItem = ({ product }: ProductListItemProps) => {
@@ -16,7 +16,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments();
 
   return (
-    <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
+    <Link href={`./${segments[0]}/menu/${product.id}`} asChild>
       <Pressable onPress={() => {}} style={styles.container}>
         <Image
           style={styles.image}
