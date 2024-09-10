@@ -1,5 +1,5 @@
 import { useProductList } from "@/api/products";
-import { ProductListItem } from "@/components/ProductListItem";
+import { ProductListItem } from "@/components/Lists/ProductListItem";
 import {
   ActivityIndicator,
   FlatList,

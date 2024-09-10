@@ -9,6 +9,77 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      order_items: {
+        Row: {
+          created_at: string
+          id: number
+          order_Id: number | null
+          product_id: number | null
+          quantity: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          order_Id?: number | null
+          product_id?: number | null
+          quantity?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          order_Id?: number | null
+          product_id?: number | null
+          quantity?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_Id_fkey"
+            columns: ["order_Id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: number
+          status: string | null
+          total: number | null
+          user_Id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          status?: string | null
+          total?: number | null
+          user_Id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          status?: string | null
+          total?: number | null
+          user_Id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_user_Id_fkey"
+            columns: ["user_Id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           created_at: string

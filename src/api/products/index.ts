@@ -16,14 +16,14 @@ export const useProductList = () => {
   });
 };
 //+ GET / FETCH by id
-export const useProductById = (productId: string) => {
+export const useProductById = (id: string) => {
   return useQuery<Product>({
-    queryKey: ["products", productId],
+    queryKey: ["products", id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("id", productId)
+        .eq("id", id)
         .single(); // take first product and return it as object
       if (error) {
         throw new Error(error.message);
@@ -86,7 +86,7 @@ export const useUpdateProduct = () => {
           image: data.image,
           price: data.price,
         })
-        .eq("id", data.productId)
+        .eq("id", data.id)
         .single(); // Insert a single product
 
       if (error) {
@@ -97,9 +97,9 @@ export const useUpdateProduct = () => {
     },
 
     // onSuccess: after successful mutation, invalidate the "products" query to refresh the data
-    async onSuccess(_, { productId }) {
+    async onSuccess(_, { id }) {
       await queryClient.invalidateQueries(["products"]);
-      await queryClient.invalidateQueries(["products", productId]); //update the product
+      await queryClient.invalidateQueries(["products", id]); //update the product
     },
     // onError: log any errors that occur during the mutation
     onError(error) {
@@ -113,11 +113,8 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    async mutationFn(productId: string) {
-      const { error } = await supabase
-        .from("products")
-        .delete()
-        .eq("id", productId);
+    async mutationFn(id: string) {
+      const { error } = await supabase.from("products").delete().eq("id", id);
       if (error) {
         throw new Error(error.message);
       }

@@ -1,16 +1,25 @@
 import { useProductById } from "@/api/products";
 import CustomButton from "@/components/Buttons/CustomButton";
-import { defaultPizzaImage } from "@/components/ProductListItem";
+import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
+import Colors from "@/constants/Colors";
 import { useCart } from "@/context/CartProvider";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
+import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const ProductDetailsScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Boolean state for loading
-  const { productId } = useLocalSearchParams(); // Retrieves the productId from the route parameters
-  const { data: chosenProduct, error, isLoading } = useProductById(productId);
+  const { id } = useLocalSearchParams(); // Retrieves the id from the route parameters
   const { items, AddItemToCart } = useCart();
+  const { data: chosenProduct, error, isLoading } = useProductById(id);
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -34,7 +43,28 @@ const ProductDetailsScreen = () => {
     <View style={style.container}>
       {/* Sets the title of the screen dynamically based on the product name */}
       <Stack.Screen options={{ title: chosenProduct.name }} />
-
+      {/* Product editing screen */}
+      <Stack.Screen
+        options={{
+          title: "Edit Product",
+          headerRight: () => (
+            <View style={style.headerIconsContainer}>
+              <Link href={`/(adminView)/menu/createItem?id=${id}`} asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <FontAwesome
+                      name="pencil" // to show edit
+                      size={25}
+                      color={Colors.light.tint}
+                      style={{ opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+            </View>
+          ),
+        }}
+      />
       {/* Displays the product image */}
       <Image
         source={{ uri: chosenProduct.image || defaultPizzaImage }}
@@ -46,7 +76,7 @@ const ProductDetailsScreen = () => {
 
       {/* CustomButton handles the "Add to Cart" action, displays loading state when submitting */}
       <CustomButton
-        title="Add To Cart"
+        title={"Add To Cart"}
         handelPress={handleSubmit} // Handles the press event and triggers handleSubmit
         isLoading={isSubmitting} // Displays the loading indicator based on the isSubmitting state
         containerStyles={{ marginTop: 10 }}
@@ -69,5 +99,9 @@ const style = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  headerIconsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

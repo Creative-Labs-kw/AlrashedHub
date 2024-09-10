@@ -16,7 +16,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments();
 
   return (
-    <Link href={`./${segments[0]}/menu/${product.id}`} asChild>
+    <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
       <Pressable onPress={() => {}} style={styles.container}>
         <Image
           style={styles.image}

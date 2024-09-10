@@ -3,7 +3,7 @@ import { Database } from "./database.types";
 //  types helper for ex: product: Table<'product'> to get the type from the DB
 export type Tables<T extends keyof Database["public"]["Tables"]> =
   Database["public"]["Tables"][T]["Row"];
-
+// to use the row in a table
 export type InsertTables<T extends keyof Database["public"]["Tables"]> =
   Database["public"]["Tables"][T]["Insert"];
 

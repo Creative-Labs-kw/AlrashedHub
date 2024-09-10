@@ -1,9 +1,11 @@
 // this for passing values into all app if used as hook(Provider & Consumer)
 // must use Provider surrounds all screens(children) or whatever component so they can us the values
 // use Context hook is to get all the value on other files
+import { useInsertOrder } from "@/api/orders";
 import { Tables } from "@/database.types";
 import { CartItem } from "@/types";
 import * as Crypto from "expo-crypto";
+import { router } from "expo-router";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 type Product = Tables<"products">;
@@ -12,6 +14,7 @@ type CartType = {
   AddItemToCart: (product: Product) => void;
   updateQuantity: (itemId: string, amount: -1 | 1) => void;
   total: number;
+  checkout: () => void;
 };
 // 1  custom context from the function form react
 const CartContext = createContext<CartType>({
@@ -20,10 +23,13 @@ const CartContext = createContext<CartType>({
   AddItemToCart: () => {},
   updateQuantity: () => {},
   total: 0,
+  checkout: () => {},
 });
 
 // 2
 const CartProvider = ({ children }: PropsWithChildren) => {
+  //+ insert or create order
+  const { mutate: InsertOrder } = useInsertOrder();
   // hold the items
   const [items, setItems] = useState<CartItem[]>([]);
   //+   addItemToCart func
@@ -69,9 +75,26 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     0
   );
 
+  // + Clear Cart (after success press on checkout)
+  const clearCart = () => {
+    setItems([]);
+  };
+
+  //+check out
+  const checkout = () => {
+    InsertOrder(
+      { total },
+      {
+        onSuccess: (data) => {
+          clearCart();
+          router.push(`/(userView)/orders/${data.id}`);
+        },
+      }
+    );
+  };
   return (
     <CartContext.Provider
-      value={{ items, AddItemToCart, updateQuantity, total }}
+      value={{ items, AddItemToCart, updateQuantity, total, checkout }}
     >
       {children}
     </CartContext.Provider>

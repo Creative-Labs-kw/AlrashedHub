@@ -2,7 +2,6 @@ import { View, Text, Image, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/Buttons/CustomButton";
 import CustomInput from "@/components/Forms/CustomInput";
-import { defaultPizzaImage } from "@/components/ProductListItem";
 import * as ImagePicker from "expo-image-picker";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
@@ -11,6 +10,7 @@ import {
   useProductById,
   useUpdateProduct,
 } from "@/api/products";
+import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
 
 // Create Product screen(CreateItemScreen)
 const CreateProductScreen = () => {
@@ -18,15 +18,15 @@ const CreateProductScreen = () => {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
-  const { productId } = useLocalSearchParams<{ productId: string }>();
-  const isUpdating = !!productId; // Check if we are updating an existing product based on whether a productId is provided
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const isUpdating = !!id; // Check if we are updating an existing product based on whether a id is provided
 
   // Call the mutate func to create or insert to the DB
   const { mutate: insertProduct } = useInsertProduct();
   // Call the mutate func to update product to the DB
   const { mutate: updateProduct } = useUpdateProduct();
   // Call the mutate func to get productById from the DB
-  const { data: updatingProduct } = useProductById(productId);
+  const { data: updatingProduct } = useProductById(id);
   //  Call Delete:
   const { mutate: deleteProduct } = useDeleteProduct();
 
@@ -85,7 +85,7 @@ const CreateProductScreen = () => {
     }
     updateProduct(
       {
-        productId,
+        id,
         name,
         image,
         price,
@@ -135,11 +135,11 @@ const CreateProductScreen = () => {
 
   // Delete / and check deleting:
   const onDelete = () => {
-    if (!productId) {
+    if (!id) {
       console.error("Product ID is undefined or null");
       return;
     }
-    deleteProduct(productId, {
+    deleteProduct(id, {
       onSuccess: () => {
         resetFields();
         router.replace("/(adminView)");
@@ -195,7 +195,7 @@ const CreateProductScreen = () => {
       />
       <Text style={{ color: "red", fontSize: 20 }}> {errorMsg}</Text>
       <CustomButton
-        title={isUpdating ? "update/edit" : "Create product"} // Set title based on whether a productId is present (update/edit vs. create product)
+        title={isUpdating ? "update/edit" : "Create product"} // Set title based on whether a id is present (update/edit vs. create product)
         handelPress={onSubmit}
       />
       {/* only id edit or updating show this */}

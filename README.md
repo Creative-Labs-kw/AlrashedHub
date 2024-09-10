@@ -15,3 +15,4 @@
 - to check ready API function , go to Table in the site > API
 - after finish the tables in DB you can Download the types from the site OR in CLI 0454 in video
 - # by running the same code in terminal after changing table update the type file
+- use the Chain icon in the nre Table to make relationships
