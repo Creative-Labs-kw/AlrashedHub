@@ -10,7 +10,11 @@ export const useAdminOrderList = ({ archived = false }) => {
   return useQuery({
     queryKey: ["orders", { archived }],
     queryFn: async () => {
-      const { data, error } = await supabase.from("orders").select("*");
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false }); // the latest at the top
+
       // .in("status", statuses);
       if (error) {
         throw new Error(error.message);
@@ -32,7 +36,8 @@ export const useUserOrderList = () => {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .eq("user_id", id);
+        .eq("user_id", id)
+        .order("created_at", { ascending: false }); // the latest at the top
       if (error) {
         throw new Error(error.message);
       }
@@ -49,7 +54,7 @@ export const useOrderById = (id: string) => {
       try {
         const { data, error } = await supabase
           .from("orders")
-          .select("*")
+          .select("*,order_items(*,products(*))") // choose rows in table so you can take all the data needed for the order details
           .eq("id", id)
           .single(); // take first order and return it as object
 
@@ -82,7 +87,7 @@ export const useInsertOrder = () => {
       return newProduct;
     },
     async onSuccess() {
-      await queryClient.invalidateQueries(["products"]);
+      await queryClient.invalidateQueries(["orders"]);
     },
   });
 };
