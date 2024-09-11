@@ -13,28 +13,28 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          order_Id: number | null
+          order_id: number | null
           product_id: number | null
           quantity: number | null
         }
         Insert: {
           created_at?: string
           id?: number
-          order_Id?: number | null
+          order_id?: number | null
           product_id?: number | null
           quantity?: number | null
         }
         Update: {
           created_at?: string
           id?: number
-          order_Id?: number | null
+          order_id?: number | null
           product_id?: number | null
           quantity?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "order_items_order_Id_fkey"
-            columns: ["order_Id"]
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
             referencedColumns: ["id"]
@@ -54,26 +54,26 @@ export type Database = {
           id: number
           status: string | null
           total: number | null
-          user_Id: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           id?: number
           status?: string | null
           total?: number | null
-          user_Id?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           id?: number
           status?: string | null
           total?: number | null
-          user_Id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "orders_user_Id_fkey"
-            columns: ["user_Id"]
+            foreignKeyName: "orders_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
