@@ -1,7 +1,8 @@
 import Colors from "@/constants/Colors";
 import { Tables } from "@/database.types";
 import { Link, useSegments } from "expo-router";
-import { Image, Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
+import RemoteImage from "../image/RemoteImage";
 
 // to be safe id no image and remove the ts error
 export const defaultPizzaImage =
@@ -18,10 +19,11 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
       <Pressable onPress={() => {}} style={styles.container}>
-        <Image
+        <RemoteImage
+          fallback={defaultPizzaImage}
+          path={product.image}
           style={styles.image}
-          resizeMode="contain" //make sure the img all if it appear inside
-          source={{ uri: product.image || defaultPizzaImage }} //use first img if u don't find it use the default one
+          resizeMode="contain"
         />
         <Text style={styles.title}>{product.name}</Text>
         <Text style={styles.title}>${product.price}</Text>

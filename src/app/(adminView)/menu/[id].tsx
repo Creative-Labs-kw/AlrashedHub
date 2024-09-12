@@ -1,5 +1,6 @@
 import { useProductById } from "@/api/products";
 import CustomButton from "@/components/Buttons/CustomButton";
+import RemoteImage from "@/components/image/RemoteImage";
 import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
 import Colors from "@/constants/Colors";
 import { useCart } from "@/context/CartProvider";
@@ -66,11 +67,12 @@ const ProductDetailsScreen = () => {
         }}
       />
       {/* Displays the product image */}
-      <Image
-        source={{ uri: chosenProduct.image || defaultPizzaImage }}
+      <RemoteImage
+        fallback={defaultPizzaImage}
+        path={chosenProduct?.image}
         style={style.image}
+        resizeMode="contain"
       />
-
       {/* Displays the product price */}
       <Text style={style.price}>${chosenProduct.price}</Text>
 

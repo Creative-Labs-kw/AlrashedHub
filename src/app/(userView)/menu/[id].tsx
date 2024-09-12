@@ -1,5 +1,6 @@
 import { useProductById } from "@/api/products";
 import CustomButton from "@/components/Buttons/CustomButton";
+import RemoteImage from "@/components/image/RemoteImage";
 import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
 import { useCart } from "@/context/CartProvider";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -36,11 +37,12 @@ const ProductDetailsScreen = () => {
       <Stack.Screen options={{ title: chosenProduct.name }} />
 
       {/* Displays the product image */}
-      <Image
-        source={{ uri: chosenProduct.image || defaultPizzaImage }}
+      <RemoteImage
+        fallback={defaultPizzaImage}
+        path={chosenProduct?.image}
         style={style.image}
+        resizeMode="contain"
       />
-
       {/* Displays the product price */}
       <Text style={style.price}>${chosenProduct.price}</Text>
 
