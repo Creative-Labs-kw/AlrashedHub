@@ -5,6 +5,7 @@ import { CartItem } from "@/types";
 import { useCart } from "@/context/CartProvider";
 import { defaultPizzaImage } from "./ProductListItem";
 import Colors from "@/constants/Colors";
+import RemoteImage from "../image/RemoteImage";
 
 type CartListItemProps = {
   cartItem: CartItem;
@@ -14,8 +15,10 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
   const { updateQuantity } = useCart();
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: cartItem.product.image || defaultPizzaImage }}
+      {/* Displays the product image */}
+      <RemoteImage
+        fallback={defaultPizzaImage}
+        path={cartItem?.product.image}
         style={styles.image}
         resizeMode="contain"
       />

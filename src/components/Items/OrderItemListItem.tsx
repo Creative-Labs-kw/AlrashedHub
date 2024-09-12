@@ -4,6 +4,7 @@ import { OrderItem } from "@/types";
 import { defaultPizzaImage } from "../Lists/ProductListItem";
 import Colors from "@/constants/Colors";
 import { Tables } from "@/database.types";
+import RemoteImage from "../image/RemoteImage";
 
 type OrderItemListItemProps = {
   item: { products: Tables<"products"> } & Tables<"order_items">;
@@ -12,8 +13,10 @@ type OrderItemListItemProps = {
 const OrderItemListItem = ({ item }: OrderItemListItemProps) => {
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: item.products.image || defaultPizzaImage }}
+      {/* Displays the product image */}
+      <RemoteImage
+        fallback={defaultPizzaImage}
+        path={item?.products.image}
         style={styles.image}
         resizeMode="contain"
       />
