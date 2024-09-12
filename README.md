@@ -17,3 +17,4 @@
 - # by running the same code in terminal after changing table update the type file
 - use the Chain icon in the nre Table to make relationships
 - you can able the real time in TAbler editor inside a table chosen(after unable the real time you cn get example from the API in the table) (don't forget to add policies)
+- npx supabase init (make supabase init to use it in doker)
