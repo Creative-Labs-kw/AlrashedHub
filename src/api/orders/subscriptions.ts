@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
-//  for admin or owner todo update saatus
+
 export const useInsertOrderSubscription = () => {
   const queryClient = useQueryClient();
 
@@ -21,9 +21,11 @@ export const useInsertOrderSubscription = () => {
     return () => {
       ordersSubscription.unsubscribe();
     };
-  }, []);
+  }, [queryClient]);
+
+  return null;
 };
-//  for uder to see update
+
 export const useUpdateOrderSubscription = (id: number) => {
   const queryClient = useQueryClient();
 
@@ -47,5 +49,7 @@ export const useUpdateOrderSubscription = (id: number) => {
     return () => {
       orders.unsubscribe();
     };
-  }, []);
+  }, [id, queryClient]);
+
+  return null;
 };
