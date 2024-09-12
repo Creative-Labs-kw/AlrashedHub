@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthProvider";
 import { supabase } from "@/lib/supabase";
-import { Order } from "@/types";
+import { Order, UpdateTables } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { InsertTables } from "./../../types";
 //+ This HOOK for GET / Fetching ALL orders(Admin)
@@ -88,6 +88,65 @@ export const useInsertOrder = () => {
     },
     async onSuccess() {
       await queryClient.invalidateQueries(["orders"]);
+    },
+  });
+};
+
+//+ hook to UPDATE ROW in the DB(Changing in DB use Mutation)
+export const useUpdateOrder = () => {
+  // Create a queryClient instance for caching and state management
+  const queryClient = useQueryClient();
+
+  // Return a mutation hook for inserting a new Orders
+  return useMutation({
+    // mutation function: performs the insert operation in the "Orders" table
+    async mutationFn({
+      id,
+      updateFields,
+    }: {
+      id: number;
+      updateFields: UpdateTables<"orders">;
+    }) {
+      // Insert the Orders into the "Orders" table
+      const { error, data: updatedOrder } = await supabase
+        .from("orders")
+        .update(updateFields)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+      // Return the newly inserted Orders data
+      return updatedOrder;
+    },
+
+    // onSuccess: after successful mutation, invalidate the "Orders" query to refresh the data
+    async onSuccess(_, { id }) {
+      await queryClient.invalidateQueries(["orders"]);
+      await queryClient.invalidateQueries(["orders", id]); //update the order
+    },
+    // onError: log any errors that occur during the mutation
+    onError(error) {
+      console.log(error);
+    },
+  });
+};
+
+//+ hook to DELETE ROW in the DB(Changing in DB use Mutation)
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn(id: string) {
+      const { error } = await supabase.from("products").delete().eq("id", id);
+      if (error) {
+        throw new Error(error.message);
+      }
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries(["products"]);
     },
   });
 };

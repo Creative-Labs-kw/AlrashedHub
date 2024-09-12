@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import React from "react";
-import relativeTime from "dayjs/plugin/relativeTime";
+import { Tables } from "@/types";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { Link, useSegments } from "expo-router";
-import { Order, Tables } from "@/types";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 dayjs.extend(relativeTime);
 

@@ -1,4 +1,4 @@
-import { useOrderById } from "@/api/orders";
+import { useOrderById, useUpdateOrder } from "@/api/orders";
 import OrderItemListItem from "@/components/Items/OrderItemListItem";
 import OrderListItem from "@/components/Lists/OrderListItem";
 import Colors from "@/constants/Colors";
@@ -17,13 +17,19 @@ const OrderDetailScreen = () => {
   const { id } = useLocalSearchParams();
 
   const { data: order, error, isLoading } = useOrderById(id);
+  const { mutate: updateOrder } = useUpdateOrder();
 
   if (isLoading) {
     return <ActivityIndicator />;
   }
-  if (error || order) {
-    return <Text> Error to fetch orders</Text>;
+
+  if (error || !order) {
+    return <Text>Error to fetch orders</Text>;
   }
+
+  const updateStatus = (status) => {
+    updateOrder({ id: id, updateFields: { status } });
+  };
 
   return (
     <View style={styles.container}>
@@ -31,7 +37,7 @@ const OrderDetailScreen = () => {
       <Stack.Screen options={{ title: `Order #${order.id}` }} />
 
       {/* Display the order details one only have same id */}
-      {/* if u add thi to the FlatList as header or footer it will be scrollable too */}
+      {/* if u add thi to the FlatList as header or it will be scrollable too */}
       <OrderListItem order={order} />
 
       {/* Render the items in the order using a FlatList */}
@@ -46,7 +52,7 @@ const OrderDetailScreen = () => {
               {OrderStatusList.map((status) => (
                 <Pressable
                   key={status}
-                  onPress={() => console.warn("Update status")}
+                  onPress={() => updateStatus(status)}
                   style={{
                     borderColor: Colors.light.tint,
                     borderWidth: 1,
