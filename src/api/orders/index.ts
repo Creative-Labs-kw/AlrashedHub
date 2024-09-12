@@ -135,18 +135,18 @@ export const useUpdateOrder = () => {
 };
 
 //+ hook to DELETE ROW in the DB(Changing in DB use Mutation)
-export const useDeleteProduct = () => {
+export const useDeleteOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     async mutationFn(id: string) {
-      const { error } = await supabase.from("products").delete().eq("id", id);
+      const { error } = await supabase.from("orders").delete().eq("id", id);
       if (error) {
         throw new Error(error.message);
       }
     },
     async onSuccess() {
-      await queryClient.invalidateQueries(["products"]);
+      await queryClient.invalidateQueries(["orders"]);
     },
   });
 };
