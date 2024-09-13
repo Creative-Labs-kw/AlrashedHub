@@ -49,13 +49,13 @@ const Index = () => {
         </TouchableOpacity>
       </Link>
 
-      <Link href={"/"} asChild>
+      {/* <Link href={"/"} asChild>
         <TouchableOpacity style={styles.button}>
           <Text onPress={() => supabase.auth.signOut} style={styles.buttonText}>
             SignOut
           </Text>
         </TouchableOpacity>
-      </Link>
+      </Link> */}
     </View>
   );
 };

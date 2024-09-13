@@ -1,17 +1,36 @@
 import { supabase } from "@/lib/supabase";
+import { router } from "expo-router";
 import React from "react";
-import { Button, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 
-// ! Why when sign out not working well
 const ProfileScreen = () => {
+  // Make signOut function async
+  const handleSignOut = async () => {
+    try {
+      // Sign out the user
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      // Replace route after successful sign-out
+      router.replace("/sign-in");
+    } catch (error) {
+      console.error("Error signing out: ", error.message);
+    }
+  };
+
   return (
-    <View>
-      <Button
-        onPress={async () => await supabase.auth.signOut()}
-        title="Sign out"
-      />
+    <View style={styles.container}>
+      <Button onPress={handleSignOut} title="Sign out" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default ProfileScreen;

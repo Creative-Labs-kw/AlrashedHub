@@ -20,3 +20,4 @@
 - npx supabase init (make supabase init to use it in doker)
 - use `npx supabase status` to get all the URL Needed to do locally
 - to use the local DB change the .env keys
+- if you want to local supabase you have to add trigger in (databases , auth) then added the trigger to migrations
