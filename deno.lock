@@ -1,0 +1,67 @@
+{
+  "version": "3",
+  "redirects": {
+    "https://esm.sh/@supabase/supabase-js@2": "https://esm.sh/@supabase/supabase-js@2.45.4"
+  },
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.45.4": "c6a1eb2b02905fe78d5b756d2d835dbee9cff9b323d70a0287fd645219db77c3",
+    "https://esm.sh/v135/@supabase/auth-js@2.65.0/denonext/auth-js.mjs": "681ac3008c2a9a3876abe3b61f86b2ff9c60b901d3e25cdcedc268593ac4ccda",
+    "https://esm.sh/v135/@supabase/functions-js@2.4.1/denonext/functions-js.mjs": "c7cb8535aa4c37b3b537c0129f978030d0ee022b99a83a110e9d80662d2cdc0a",
+    "https://esm.sh/v135/@supabase/node-fetch@2.6.15/denonext/node-fetch.mjs": "efad00ea3d4cbe1bee688836ef75339d49a1981bc5728a13e9ad5f26791d5efb",
+    "https://esm.sh/v135/@supabase/postgrest-js@1.16.1/denonext/postgrest-js.mjs": "ffacacaff923deeccafadaa53752d62804a96af4d87a7f62ec0e3ae17e585e5f",
+    "https://esm.sh/v135/@supabase/realtime-js@2.10.2/denonext/realtime-js.mjs": "5a4e1073018ac5e7c1ab348cebd2880ca079e6a18ad3cf5ca8fa443e9c80778c",
+    "https://esm.sh/v135/@supabase/storage-js@2.7.0/denonext/storage-js.mjs": "b581cd3ad72a545ad56302dbece8327536a48c2a5c7854d4dcc6f84c1f43e7a9",
+    "https://esm.sh/v135/@supabase/supabase-js@2.45.4/denonext/supabase-js.mjs": "35c91455ce7616c485a2675273585a8e051ca0662f333c982310f76ce6ec7142",
+    "https://esm.sh/v135/bufferutil@4.0.8/denonext/bufferutil.mjs": "60a4618cbd1a5cb24935c55590b793d4ecb33862357d32e1d4614a0bbb90947f",
+    "https://esm.sh/v135/node-gyp-build@4.6.1/denonext/node-gyp-build.mjs": "5d28b312f145a6cb2ec0dbdd80a7d34c0e0e6b5dcada65411d8bcff6c8991cc6",
+    "https://esm.sh/v135/node-gyp-build@4.8.1/denonext/node-gyp-build.mjs": "cddfc39c5f2d6e228fb1cd8cc36a594d870470b01348f866a7fb4e6f3ed8c66d",
+    "https://esm.sh/v135/utf-8-validate@6.0.4/denonext/utf-8-validate.mjs": "ab4990b545a45f10f7711c69046ee3e9c5b732b9781937f922cefd3fc99d0e88",
+    "https://esm.sh/v135/ws@8.17.1/denonext/ws.mjs": "8c9b9fd82d9879be14e9145aee4104ad43dea340e458e144dc166588f7ff5144"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@babel/core@^7.20.0",
+        "npm:@expo/vector-icons@^14.0.2",
+        "npm:@react-native-async-storage/async-storage@^1.23.1",
+        "npm:@react-navigation/material-top-tabs@^6.6.14",
+        "npm:@react-navigation/native@^6.0.2",
+        "npm:@stripe/stripe-react-native@0.37.2",
+        "npm:@supabase/supabase-js@^2.45.4",
+        "npm:@tanstack/react-query@^5.55.2",
+        "npm:@types/react-native@^0.73.0",
+        "npm:@types/react@~18.2.45",
+        "npm:base64-arraybuffer@^1.0.2",
+        "npm:dayjs@^1.11.13",
+        "npm:expo-crypto@~13.0.2",
+        "npm:expo-file-system@~17.0.1",
+        "npm:expo-font@~12.0.9",
+        "npm:expo-image-picker@~15.0.7",
+        "npm:expo-linking@~6.3.1",
+        "npm:expo-router@~3.5.23",
+        "npm:expo-secure-store@^13.0.2",
+        "npm:expo-splash-screen@~0.27.5",
+        "npm:expo-status-bar@~1.12.1",
+        "npm:expo-system-ui@~3.0.7",
+        "npm:expo-web-browser@~13.0.3",
+        "npm:expo@^51.0.32",
+        "npm:jest-expo@~51.0.3",
+        "npm:jest@^29.2.1",
+        "npm:react-dom@18.2.0",
+        "npm:react-native-elements@^3.4.3",
+        "npm:react-native-pager-view@^6.3.0",
+        "npm:react-native-reanimated@~3.10.1",
+        "npm:react-native-safe-area-context@4.10.5",
+        "npm:react-native-screens@3.31.1",
+        "npm:react-native-url-polyfill@^2.0.0",
+        "npm:react-native-web@^0.19.12",
+        "npm:react-native@0.74.5",
+        "npm:react-test-renderer@18.2.0",
+        "npm:react@18.2.0",
+        "npm:stripe@^16.11.0",
+        "npm:supabase@^1.192.5",
+        "npm:typescript@~5.3.3"
+      ]
+    }
+  }
+}

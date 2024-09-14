@@ -4,12 +4,8 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import { serve } from "https://deno.land/std@0.132.0/http/server.ts";
-import Stripe from 'https://esm.sh/stripe@13.10.0?target=deno&deno-std=0.132.0&no-check';
+import { stripe } from "../_utils/stripe.ts";
 
-// Initialize Stripe
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
-  httpClient: Stripe.createFetchHttpClient(),
-});
 
 serve(async (req) => {
   try {
