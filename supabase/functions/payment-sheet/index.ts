@@ -2,55 +2,51 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-// Setup type definitions for built-in Supabase Runtime APIs
-import { serve } from "https://deno.land/std@0.132.0/http/server.ts";
-import { stripe } from "../_utils/stripe.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { stripe } from '../_utils/stripe.ts';
+import { createOrRetrieveProfile } from '../_utils/supabase.ts';
 
+console.log('Hello from Functions!');
 
-serve(async (req) => {
+serve(async (req: Request) => {
   try {
     const { amount } = await req.json();
 
-    // Validate amount
-    if (!amount || isNaN(amount)) {
-      throw new Error('Invalid amount');
-    }
+    const customer = await createOrRetrieveProfile(req);
 
-    // Create payment intent
+    // Create an ephermeralKey so that the Stripe SDK can fetch the customer's stored payment methods.
+    const ephemeralKey = await stripe.ephemeralKeys.create(
+      { customer: customer },
+      { apiVersion: '2020-08-27' }
+    );
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount || 1099, // Default to 10.99 USD if amount is not provided
+      amount: amount,
       currency: 'usd',
+      customer: customer,      
     });
 
-    const response = {
-      client_secret: paymentIntent.client_secret,
-      PUBLISHABLE_KEY: Deno.env.get('EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY'),
+    const res = {
+      paymentIntent: paymentIntent.client_secret,
+      publishableKey: Deno.env.get('EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY'),
+      customer: customer,
+      ephemeralKey: ephemeralKey.secret,
     };
 
-    return new Response(
-      JSON.stringify(response),
-      { headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify(res), {
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error('Error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: { "Content-Type": "application/json" },
+    console.log(error);
+    return new Response(JSON.stringify(error), {
+      headers: { 'Content-Type': 'application/json' },
       status: 400,
     });
   }
 });
 
-
-
-
-// To invoke locally:
-
-  // 1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  // 2. Make an HTTP request:
-
-  // curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/payment-sheet/payment-sheet' \
-  //   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-  //   --header 'Content-Type: application/json' \
-  //   --data '{"amount":1000}'
-
-// answer if ok Info] Hello from Functions! + {"message":"Hello abdullah!"}%    
+// To invoke:
+// curl -i --request POST 'http://localhost:54321/functions/v1/payment-sheet' \
+//   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
+//   --header 'Content-Type: application/json' \
+//   --data '{"amount":1150}'
