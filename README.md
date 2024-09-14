@@ -37,3 +37,5 @@
 
 # TO Deploy a need thing to the backend(Supabase) ` npx supabase functions deploy payment-sheet ` or name of the function - to check go to the production DB and in Edge functions and sse it
 - in payment service they mostly have a way to show the card pay data `https://docs.expo.dev/versions/latest/sdk/stripe/`
+- after changing in the local DB Do migrations ` npx supabase db diff -f new_name_of_file ` diff(will see the differences) ex what added `alter table "public"."profiles" add column "stripe_customer_id" text; `
+- To push the update from the local DB to the MAin One `npx supabase db push`
