@@ -3,6 +3,7 @@
 // use Context hook is to get all the value on other files
 import { useInsertOrderItems } from "@/api/order-items";
 import { useInsertOrder } from "@/api/orders";
+import { initialisePaymentSheet, openPaymentSheet } from "@/lib/stripe";
 import { CartItem, Tables } from "@/types";
 import * as Crypto from "expo-crypto";
 import { router } from "expo-router";
@@ -82,15 +83,26 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     setItems([]);
   };
 
-  //+check out
-  const checkout = () => {
+  //+ check out
+  const checkout = async () => {
+    // Initialize payment sheet
+    await initialisePaymentSheet(Math.floor(total * 100)); // Converting total to cents for Stripe
+    const payed = await openPaymentSheet(); // Open the payment sheet
+  
+    if (!payed) {
+      return; // If payment fails, stop the checkout process
+    }
+  
+    // If payment is successful, proceed to insert the order into the database
     InsertOrder(
-      { total },
+      { total }, // Order details
       {
-        onSuccess: saveOrderItems,
+        onSuccess: saveOrderItems, // Callback function to save related order items
       }
     );
   };
+  
+  
 
   //+ saveOrderItems
   const saveOrderItems = (order: Tables<"orders">) => {

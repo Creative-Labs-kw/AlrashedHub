@@ -36,3 +36,4 @@
     - if all ok: `// answer if ok Info] Hello from Functions! + {"message":"Hello abdullah!"}%  `
 
 # TO Deploy a need thing to the backend(Supabase) ` npx supabase functions deploy payment-sheet ` or name of the function - to check go to the production DB and in Edge functions and sse it
+- in payment service they mostly have a way to show the card pay data `https://docs.expo.dev/versions/latest/sdk/stripe/`
