@@ -1,5 +1,6 @@
 import AuthProvider from "@/context/AuthProvider";
 import CartProvider from "@/context/CartProvider";
+import NotificationProvider from "@/context/NotificationsProvider";
 import QueryProvider from "@/context/QueryProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
@@ -57,10 +58,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <NotificationProvider>
+
       <StripeProvider
    publishableKey={
-    process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''
-  }
+     process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''
+    }
 >
       <AuthProvider>
         <QueryProvider>
@@ -69,11 +72,11 @@ function RootLayoutNav() {
               <Stack.Screen
                 name="(userView)"
                 options={{ headerShown: false }}
-              />
+                />
               <Stack.Screen
                 name="(adminView)"
                 options={{ headerShown: false }}
-              />
+                />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="cart" options={{ presentation: "modal" }} />
             </Stack>
@@ -81,6 +84,7 @@ function RootLayoutNav() {
         </QueryProvider>
       </AuthProvider>
       </StripeProvider>
+                </NotificationProvider>
     </ThemeProvider>
   );
 }

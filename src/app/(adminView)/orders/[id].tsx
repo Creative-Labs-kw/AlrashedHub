@@ -27,9 +27,23 @@ const OrderDetailScreen = () => {
     return <Text>Error to fetch orders</Text>;
   }
 
-  const updateStatus = (status) => {
-    updateOrder({ id: id, updateFields: { status } });
+  const updateStatus = async (status: string) => {
+    await updateOrder({
+      id: id,
+      updatedFields: { status },
+    });
+    if (order) {
+      await notifyUserAboutOrderUpdate({ ...order, status }); //order update notifications
+    }
   };
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error || !order) {
+    return <Text>Failed to fetch</Text>;
+  }
+
 
   return (
     <View style={styles.container}>
@@ -93,3 +107,7 @@ const styles = StyleSheet.create({
 });
 
 export default OrderDetailScreen;
+function notifyUserAboutOrderUpdate<T>(arg0: T) {
+  throw new Error("Function not implemented.");
+}
+

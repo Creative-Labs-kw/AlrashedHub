@@ -34,8 +34,33 @@
     --header 'Content-Type: application/json' \
     --data '{"name":"abdullah"} `
     - if all ok: `// answer if ok Info] Hello from Functions! + {"message":"Hello abdullah!"}%  `
+      <!-- set the .env Var to the Remote or Productions supabase  -->
+  - Remote env Variable `npx supabase secrets set S_KEY=...etc     `
+  - to check them `npx supabase secrets list`
 
 # TO Deploy a need thing to the backend(Supabase) ` npx supabase functions deploy payment-sheet ` or name of the function - to check go to the production DB and in Edge functions and sse it
 - in payment service they mostly have a way to show the card pay data `https://docs.expo.dev/versions/latest/sdk/stripe/`
 - after changing in the local DB Do migrations ` npx supabase db diff -f new_name_of_file ` diff(will see the differences) ex what added `alter table "public"."profiles" add column "stripe_customer_id" text; `
 - To push the update from the local DB to the MAin One `npx supabase db push`
+
+<!-- Notifications Expo notification -->
+- for local notifications library like alarm inside the app ` https://docs.expo.dev/versions/latest/sdk/notifications/ ` (get token of device)
+- for Remote notifications service like doing like in instagram ` https://docs.expo.dev/push-notifications/overview/` help do for both devices
+- steps to do it
+ - take permissions fro mobile
+ - user's ExpoPushToken
+ - install library `npx expo install expo-notifications expo-device expo-constants `
+ - make provider and surround the screens (to ge the token to use it)
+ - use the tool for push nitoficaotins (use need a device token permission)
+ - can't use simulator for pushing
+ - to use it in the app stores need FCM token and firebase token to use them from them
+
+ <!-- Steps to work on something relate to the DB or backend -->
+  - change locally
+  - migrate it `npx supabase db diff -f add_expo_token_notifications `
+  - after finish push to productions ` npx supabase db push `
+
+
+
+<!-- Deploy -->
+- in expo site ( Get Credentials for development builds) and set the notifications
