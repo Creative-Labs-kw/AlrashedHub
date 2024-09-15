@@ -67,3 +67,8 @@
 <!-- Deploy -->
 
 - in expo site ( Get Credentials for development builds) and set the notifications
+
+<!-- If local DB not working -->
+
+- `supabase stop`
+- `supabase start`
