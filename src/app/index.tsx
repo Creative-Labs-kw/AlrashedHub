@@ -1,14 +1,14 @@
+import { useAuth } from "@/context/AuthProvider";
+import { Link, Redirect } from "expo-router";
+import React from "react";
 import {
-  View,
+  ActivityIndicator,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
+  View,
 } from "react-native";
-import React from "react";
-import { Link, Redirect } from "expo-router";
-import { useAuth } from "@/context/AuthProvider";
-import { supabase } from "@/lib/supabase";
+
 
 //  For testing this should be the "Welcome Screen"
 const Index = () => {

@@ -9,7 +9,8 @@ import * as Crypto from "expo-crypto";
 import { router } from "expo-router";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 
-type Product = Tables<"products">;
+type Product = Tables<"products"> & { price: number }; // Change to non-nullable price
+
 type CartType = {
   items: CartItem[];
   AddItemToCart: (product: Product) => void;

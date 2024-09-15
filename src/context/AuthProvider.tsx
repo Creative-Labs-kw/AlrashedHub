@@ -58,7 +58,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
             .select("*")
             .eq("id", session.user.id)
             .single();
-          setProfile(data || null);
+          setProfile(data as Profile | null); // Type assertion to match Profile type
         }
         setLoading(false);
       } catch (err: any) {

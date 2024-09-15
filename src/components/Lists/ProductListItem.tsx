@@ -18,7 +18,11 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
 
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
-      <Pressable onPress={() => {}} style={styles.container}>
+      <Pressable 
+        onPress={() => {}} 
+        style={[styles.container, { pointerEvents: 'auto' }]} // Add pointerEvents to style
+        role="button" // Replace accessibilityRole with role
+      >
         <RemoteImage
           fallback={defaultPizzaImage}
           path={product.image}
