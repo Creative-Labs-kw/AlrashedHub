@@ -13,8 +13,12 @@ const ProfileScreen = () => {
 
       // Replace route after successful sign-out
       router.replace("/sign-in");
-    } catch (error) {
-      console.error("Error signing out: ", error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error signing out: ", error.message);
+      } else {
+        console.error("Error signing out: ", error);
+      }
     }
   };
 

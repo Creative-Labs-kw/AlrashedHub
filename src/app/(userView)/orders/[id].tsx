@@ -13,10 +13,11 @@ import {
 
 const OrderDetailScreen = () => {
   const { id } = useLocalSearchParams();
+  const orderId = Array.isArray(id) ? id[0] : id; // Keep as string
 
-  const { data, error, isLoading } = useOrderById(id);
+  const { data, error, isLoading } = useOrderById(orderId); // Pass as string
 
-  useUpdateOrderSubscription(id);
+  useUpdateOrderSubscription(Number(orderId)); // Convert to number
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -29,13 +30,23 @@ const OrderDetailScreen = () => {
     <View style={styles.container}>
       {/* Set the screen title to the order ID */}
       <Stack.Screen options={{ title: `Order #${id}` }} />
-      {/* Display the order details one only have same id */}
-      {/* if u add thi to the FlatList as header or footer it will be scrollable too */}
-      <OrderListItem order={data} />
-      {/* Render the items in the order using a FlatList */}
+      {/* Display the order details only if data is defined */}
+      {data && <OrderListItem order={data} />}
+      {/* Ensure data is defined before accessing order_items */}
       <FlatList
-        data={data.order_items}
-        renderItem={({ item }) => <OrderItemListItem item={item} />}
+        data={data?.order_items} // Use optional chaining
+        renderItem={({ item }) => (
+          <OrderItemListItem 
+            item={{
+              ...item,
+              products: item.products ? {
+                ...item.products,
+                created_at: '', // Provide a default value
+                image: null, // Provide a default value
+              } : { created_at: '', image: null, id: 0, name: '', price: null }, // Default object
+            }} 
+          />
+        )}
         contentContainerStyle={{ gap: 10 }} // Adds space between list items
       />
     </View>
