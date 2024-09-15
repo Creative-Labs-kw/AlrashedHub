@@ -61,7 +61,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
             throw new Error(profileError.message);
           }
 
-          setProfile(data as Profile | null);
+          setProfile(data as unknown as Profile | null);
         }
 
         setLoading(false);
@@ -82,7 +82,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         } else {
           setProfile(null);
         }
-      },
+      }
     );
 
     return () => {
@@ -102,7 +102,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         throw new Error(error.message);
       }
 
-      setProfile(data as Profile | null);
+      setProfile(data as unknown as Profile | null);
     } catch (err: any) {
       console.log("Error fetching profile:", err.message);
     }

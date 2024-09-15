@@ -7,19 +7,46 @@ import { supabase } from "@/lib/supabase";
 import Colors from "../../constants/Colors";
 
 const SignUpScreen = () => {
-  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState(""); // Added email state
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const signUpWithEmail = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    console.log("Attempting to sign up...");
+
+    // Handle user sign up with Supabase
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
+
     if (error) {
-      Alert.alert(error.message);
+      console.log("Sign up error:", error.message);
+      Alert.alert("Sign up error", error.message);
+    } else {
+      console.log("Sign up successful:", data);
+
+      // Optionally, store the full name in the user profile or in a separate table
+      const userId = data?.user?.id;
+      if (userId) {
+        console.log("User ID:", userId);
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .upsert([{ id: userId, full_name: fullName }]); // Use upsert to handle both insert and update
+
+        if (profileError) {
+          console.log("Profile insert error:", profileError.message);
+          Alert.alert("Profile error", profileError.message);
+        } else {
+          console.log("Profile inserted successfully");
+        }
+      } else {
+        console.log("User ID not found");
+      }
     }
+
     setLoading(false);
   };
 
@@ -28,11 +55,19 @@ const SignUpScreen = () => {
       <Stack.Screen options={{ title: "Sign up" }} />
 
       <CustomInput
+        title="Full Name"
+        handelChangeText={setFullName}
+        placeHolder="Enter your full name"
+        value={fullName}
+        iconName="user"
+      />
+
+      <CustomInput
         title="Email"
         handelChangeText={setEmail}
-        placeHolder="jon@gmail.com"
+        placeHolder="Enter your email"
         value={email}
-        iconName="envelope"
+        iconName="envelope" // Use an appropriate icon for email
       />
 
       <CustomInput
