@@ -48,22 +48,25 @@ export const useUserOrderList = () => {
 
 //+ GET / FETCH by id (Details)
 export const useOrderById = (id: string) => {
-  return useQuery<Order>({
-    queryKey: ["orders", id],
+  return useQuery<Order, Error>({
+    queryKey: ["order", id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("orders")
-        .select("*,order_items(*,products(*))")
+        .select("*, order_items(*, products(*))")
         .eq("id", id)
         .single();
 
-      if (error || !data) { // Check for error or if data is null
-        throw new Error(error ? error.message : "Order not found"); // Throw error if order not found
+      if (error || !data) {
+        throw new Error(error?.message || "Order not found");
       }
-      return data; // Ensure data is of type Order
+
+      return data as Order; // Explicitly cast the result to the Order type
     },
   });
 };
+
+
 
 //+ hook to CREATE or INSERT ROW in the DB(Changing in DB use Mutation)
 export const useInsertOrder = () => {

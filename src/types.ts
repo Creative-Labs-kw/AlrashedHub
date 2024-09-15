@@ -39,14 +39,28 @@ export const OrderStatusList: OrderStatus[] = [
 
 export type OrderStatus = "New" | "Cooking" | "Delivering" | "Delivered";
 
+// Update the Order type definition to allow user_id to be null
+// Assuming you have access to the Order type definition, modify it as follows:
 export type Order = {
   id: number;
   created_at: string;
-  total: number;
-  user_id: string;
-  status: OrderStatus;
-  order_items?: OrderItem[];
+  status: string | null;
+  total: number | null; // total is nullable, so we add null here
+  user_id: string | null;
+  order_items: {
+    id: number;
+    created_at: string;
+    order_id: number | null;
+    product_id: number | null;
+    quantity: number | null;
+    products: {
+      id: number;
+      name: string;
+      price: number;
+    } | null;
+  }[];
 };
+
 
 export type OrderItem = {
   id: number;
