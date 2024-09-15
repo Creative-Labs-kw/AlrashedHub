@@ -12,7 +12,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
 
 const ProductDetailsScreen = () => {
@@ -49,7 +49,9 @@ const ProductDetailsScreen = () => {
   return (
     <View style={style.container}>
       {/* Sets the title of the screen dynamically based on the product name */}
-      <Stack.Screen options={{ title: chosenProduct?.name || "Product Details" }} />
+      <Stack.Screen
+        options={{ title: chosenProduct?.name || "Product Details" }}
+      />
       {/* Product editing screen */}
       <Stack.Screen
         options={{
@@ -80,8 +82,8 @@ const ProductDetailsScreen = () => {
         resizeMode="contain"
       />
       {/* Displays the product price */}
-      <Text style={style.price}>${chosenProduct?.price || "N/A"}</Text> {/* Use optional chaining and fallback value */}
-
+      <Text style={style.price}>${chosenProduct?.price || "N/A"}</Text>{" "}
+      {/* Use optional chaining and fallback value */}
       {/* CustomButton handles the "Add to Cart" action, displays loading state when submitting */}
       <CustomButton
         title={"Add To Cart"}

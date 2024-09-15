@@ -61,7 +61,6 @@ export const useInsertProduct = () => {
     // onSuccess: after successful mutation, invalidate the "products" query to refresh the data
     async onSuccess() {
       await queryClient.invalidateQueries({ queryKey: ["products"] }); // Updated to use an object with queryKey
-
     },
     // onError: log any errors that occur during the mutation
     onError(error) {
@@ -100,8 +99,7 @@ export const useUpdateProduct = () => {
     // onSuccess: after successful mutation, invalidate the "products" query to refresh the data
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ["products"] }); // Updated to use an object with queryKey
-      await queryClient.invalidateQueries({ queryKey: ["products",id] }); // Updated to use an object with queryKey
-
+      await queryClient.invalidateQueries({ queryKey: ["products", id] }); // Updated to use an object with queryKey
     },
     // onError: log any errors that occur during the mutation
     onError(error) {

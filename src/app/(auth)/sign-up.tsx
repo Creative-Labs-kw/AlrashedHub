@@ -1,9 +1,10 @@
-import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
-import React, { useState } from "react";
-import Colors from "../../constants/Colors";
+import { useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import { Link, Stack } from "expo-router";
 import CustomButton from "@/components/Buttons/CustomButton";
+import CustomInput from "@/components/Forms/CustomInput";
 import { supabase } from "@/lib/supabase";
+import Colors from "../../constants/Colors";
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState("");
@@ -12,9 +13,7 @@ const SignUpScreen = () => {
 
   const signUpWithEmail = async () => {
     setLoading(true);
-    // take the error from the function
     const { error } = await supabase.auth.signUp({
-      // add options to make the function work
       email,
       password,
     });
@@ -23,32 +22,33 @@ const SignUpScreen = () => {
     }
     setLoading(false);
   };
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Sign up" }} />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
+      <CustomInput
+        title="Email"
+        handelChangeText={setEmail}
+        placeHolder="jon@gmail.com"
         value={email}
-        onChangeText={setEmail}
-        placeholder="jon@gmail.com"
-        style={styles.input}
+        iconName="envelope"
       />
 
-      <Text style={styles.label}>Password</Text>
-      <TextInput
+      <CustomInput
+        title="Password"
+        handelChangeText={setPassword}
+        placeHolder="Enter your password"
         value={password}
-        onChangeText={setPassword}
-        placeholder=""
-        style={styles.input}
-        secureTextEntry
+        iconName="lock"
       />
 
       <CustomButton
         handelPress={signUpWithEmail}
-        title={loading ? "Creating..." : "Create account"} //nice to let user wait
-        disabled={loading} //avoid multi clicking
+        title={loading ? "Creating..." : "Create account"}
+        disabled={loading}
       />
+
       <Link href="/sign-in" style={styles.textButton}>
         Sign in
       </Link>
@@ -61,18 +61,6 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     flex: 1,
-  },
-  label: {
-    color: "gray",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "gray",
-    padding: 10,
-    marginTop: 5,
-    marginBottom: 20,
-    backgroundColor: "white",
-    borderRadius: 5,
   },
   textButton: {
     alignSelf: "center",

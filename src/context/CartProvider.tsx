@@ -3,7 +3,7 @@
 // use Context hook is to get all the value on other files
 import { useInsertOrderItems } from "@/api/order-items";
 import { useInsertOrder } from "@/api/orders";
-import { initialisePaymentSheet,openPaymentSheet } from "@/lib/stripe";
+import { initialisePaymentSheet, openPaymentSheet } from "@/lib/stripe";
 import { CartItem, Tables } from "@/types";
 import * as Crypto from "expo-crypto";
 import { router } from "expo-router";
@@ -67,16 +67,16 @@ const CartProvider = ({ children }: PropsWithChildren) => {
             // Check if the current item's ID matches the one to be updated
             item.id !== itemId
               ? item // If IDs do not match, keep the item unchanged
-              : { ...item, quantity: item.quantity + amount } // If IDs match, update the quantity
+              : { ...item, quantity: item.quantity + amount }, // If IDs match, update the quantity
         )
-        .filter((item) => item.quantity > 0) //! if it less then 0 remove it
+        .filter((item) => item.quantity > 0), //! if it less then 0 remove it
     );
   };
 
   //+   To make the sum total
   const total = items.reduce(
     (sum, item) => (sum += item.product.price * item.quantity),
-    0
+    0,
   );
 
   // + Clear Cart (after success press on checkout)
@@ -96,11 +96,9 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       { total },
       {
         onSuccess: saveOrderItems,
-      }
+      },
     );
   };
-  
-  
 
   //+ saveOrderItems
   const saveOrderItems = (order: Tables<"orders">) => {
@@ -133,5 +131,3 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 export default CartProvider;
 // 3 make the hook
 export const useCart = () => useContext(CartContext);
-
-

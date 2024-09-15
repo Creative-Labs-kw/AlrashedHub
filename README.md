@@ -23,44 +23,47 @@
 - if you want to local supabase you have to add trigger in (databases , auth) then added the trigger to migrations
 
 <!-- stripe 6:45 in video -->
+
 - make account
 - test mode
 - get 2 keys
-- create payment intend in server side using Edge Functions from supabase better in local first 
+- create payment intend in server side using Edge Functions from supabase better in local first
 - `npx supabase functions new payment-sheet`
 - locally use this to connect to stripe(`npx supabase functions serve --env-file .env payment-sheet`) (this for running the other one for testing the func)
--   ` curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/payment-sheet/payment-sheet' \
-    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-    --header 'Content-Type: application/json' \
-    --data '{"name":"abdullah"} `
-    - if all ok: `// answer if ok Info] Hello from Functions! + {"message":"Hello abdullah!"}%  `
-      <!-- set the .env Var to the Remote or Productions supabase  -->
-  - Remote env Variable `npx supabase secrets set S_KEY=...etc     `
-  - to check them `npx supabase secrets list`
+- `curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/payment-sheet/payment-sheet' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
+--header 'Content-Type: application/json' \
+--data '{"name":"abdullah"}`
+  - if all ok: `// answer if ok Info] Hello from Functions! + {"message":"Hello abdullah!"}%  `
+    <!-- set the .env Var to the Remote or Productions supabase  -->
+- Remote env Variable `npx supabase secrets set S_KEY=...etc     `
+- to check them `npx supabase secrets list`
 
-# TO Deploy a need thing to the backend(Supabase) ` npx supabase functions deploy payment-sheet ` or name of the function - to check go to the production DB and in Edge functions and sse it
+# TO Deploy a need thing to the backend(Supabase) `npx supabase functions deploy payment-sheet` or name of the function - to check go to the production DB and in Edge functions and sse it
+
 - in payment service they mostly have a way to show the card pay data `https://docs.expo.dev/versions/latest/sdk/stripe/`
-- after changing in the local DB Do migrations ` npx supabase db diff -f new_name_of_file ` diff(will see the differences) ex what added `alter table "public"."profiles" add column "stripe_customer_id" text; `
+- after changing in the local DB Do migrations `npx supabase db diff -f new_name_of_file` diff(will see the differences) ex what added `alter table "public"."profiles" add column "stripe_customer_id" text; `
 - To push the update from the local DB to the MAin One `npx supabase db push`
 
 <!-- Notifications Expo notification -->
-- for local notifications library like alarm inside the app ` https://docs.expo.dev/versions/latest/sdk/notifications/ ` (get token of device)
+
+- for local notifications library like alarm inside the app `https://docs.expo.dev/versions/latest/sdk/notifications/` (get token of device)
 - for Remote notifications service like doing like in instagram ` https://docs.expo.dev/push-notifications/overview/` help do for both devices
 - steps to do it
- - take permissions fro mobile
- - user's ExpoPushToken
- - install library `npx expo install expo-notifications expo-device expo-constants `
- - make provider and surround the screens (to ge the token to use it)
- - use the tool for push nitoficaotins (use need a device token permission)
- - can't use simulator for pushing
- - to use it in the app stores need FCM token and firebase token to use them from them
+- take permissions fro mobile
+- user's ExpoPushToken
+- install library `npx expo install expo-notifications expo-device expo-constants `
+- make provider and surround the screens (to ge the token to use it)
+- use the tool for push nitoficaotins (use need a device token permission)
+- can't use simulator for pushing
+- to use it in the app stores need FCM token and firebase token to use them from them
 
  <!-- Steps to work on something relate to the DB or backend -->
-  - change locally
-  - migrate it `npx supabase db diff -f add_expo_token_notifications `
-  - after finish push to productions ` npx supabase db push `
 
-
+- change locally
+- migrate it `npx supabase db diff -f add_expo_token_notifications `
+- after finish push to productions `npx supabase db push`
 
 <!-- Deploy -->
+
 - in expo site ( Get Credentials for development builds) and set the notifications

@@ -61,7 +61,6 @@ export type Order = {
   }[];
 };
 
-
 export type OrderItem = {
   id: number;
   product_id: number;

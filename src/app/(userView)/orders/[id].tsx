@@ -36,15 +36,17 @@ const OrderDetailScreen = () => {
       <FlatList
         data={data?.order_items} // Use optional chaining
         renderItem={({ item }) => (
-          <OrderItemListItem 
+          <OrderItemListItem
             item={{
               ...item,
-              products: item.products ? {
-                ...item.products,
-                created_at: '', // Provide a default value
-                image: null, // Provide a default value
-              } : { created_at: '', image: null, id: 0, name: '', price: null }, // Default object
-            }} 
+              products: item.products
+                ? {
+                    ...item.products,
+                    created_at: "", // Provide a default value
+                    image: null, // Provide a default value
+                  }
+                : { created_at: "", image: null, id: 0, name: "", price: null }, // Default object
+            }}
           />
         )}
         contentContainerStyle={{ gap: 10 }} // Adds space between list items

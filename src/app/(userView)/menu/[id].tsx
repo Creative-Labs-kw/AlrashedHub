@@ -46,7 +46,6 @@ const ProductDetailsScreen = () => {
     <View style={style.container}>
       {/* Sets the title of the screen dynamically based on the product name */}
       <Stack.Screen options={{ title: chosenProduct?.name || "Product" }} />
-
       {/* Displays the product image */}
       <RemoteImage
         fallback={defaultPizzaImage}
@@ -55,8 +54,8 @@ const ProductDetailsScreen = () => {
         resizeMode="contain"
       />
       {/* Displays the product price */}
-      <Text style={style.price}>${chosenProduct?.price || "N/A"}</Text> {/* Added optional chaining and fallback value */}
-
+      <Text style={style.price}>${chosenProduct?.price || "N/A"}</Text>{" "}
+      {/* Added optional chaining and fallback value */}
       {/* CustomButton handles the "Add to Cart" action, displays loading state when submitting */}
       <CustomButton
         title="Add To Cart"

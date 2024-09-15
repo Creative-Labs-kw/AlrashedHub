@@ -34,7 +34,7 @@ const OrderDetailScreen = () => {
       updateFields: { status }, // Changed from updatedFields to updateFields
     });
     if (order) {
-      // notifyUserAboutOrderUpdate({ ...order, status }); 
+      // notifyUserAboutOrderUpdate({ ...order, status });
     }
   };
 
@@ -44,7 +44,6 @@ const OrderDetailScreen = () => {
   if (error || !order) {
     return <Text>Failed to fetch</Text>;
   }
-
 
   return (
     <View style={styles.container}>
@@ -59,18 +58,28 @@ const OrderDetailScreen = () => {
       <FlatList
         data={order.order_items}
         renderItem={({ item }) => (
-          <OrderItemListItem 
+          <OrderItemListItem
             item={{
               ...item,
               products: {
                 ...item.products,
-                image: (item.products as { image?: string; created_at?: string; id: number; name: string; price: number; }).image || null, // Ensure image is included
-                created_at: (item.products as { created_at?: string }).created_at || "", // Default value for created_at
+                image:
+                  (
+                    item.products as {
+                      image?: string;
+                      created_at?: string;
+                      id: number;
+                      name: string;
+                      price: number;
+                    }
+                  ).image || null, // Ensure image is included
+                created_at:
+                  (item.products as { created_at?: string }).created_at || "", // Default value for created_at
                 id: item.products?.id || 0, // Provide a default value for id
                 name: item.products?.name || "", // Provide a default value for name
                 price: item.products?.price || null, // Provide a default value for price
-              }
-            }} 
+              },
+            }}
           />
         )}
         contentContainerStyle={{ gap: 10 }} // Adds space between list items

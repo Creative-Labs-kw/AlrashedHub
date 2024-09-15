@@ -59,32 +59,35 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <NotificationProvider>
-
-      <StripeProvider
-   publishableKey={
-     process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''
-    }
->
-      <AuthProvider>
-        <QueryProvider>
-          <CartProvider>
-            <Stack>
-              <Stack.Screen
-                name="(userView)"
-                options={{ headerShown: false }}
-                />
-              <Stack.Screen
-                name="(adminView)"
-                options={{ headerShown: false }}
-                />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="cart" options={{ presentation: "modal" }} />
-            </Stack>
-          </CartProvider>
-        </QueryProvider>
-      </AuthProvider>
-      </StripeProvider>
-                </NotificationProvider>
+        <StripeProvider
+          publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""}
+        >
+          <AuthProvider>
+            <QueryProvider>
+              <CartProvider>
+                <Stack>
+                  <Stack.Screen
+                    name="(userView)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(adminView)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="cart"
+                    options={{ presentation: "modal" }}
+                  />
+                </Stack>
+              </CartProvider>
+            </QueryProvider>
+          </AuthProvider>
+        </StripeProvider>
+      </NotificationProvider>
     </ThemeProvider>
   );
 }

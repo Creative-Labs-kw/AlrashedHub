@@ -1,24 +1,24 @@
-import { Alert } from 'react-native';
-import { supabase } from './supabase';
+import { Alert } from "react-native";
+import { supabase } from "./supabase";
 import {
   initPaymentSheet,
   presentPaymentSheet,
-} from '@stripe/stripe-react-native';
+} from "@stripe/stripe-react-native";
 
 const fetchPaymentSheetParams = async (amount: number) => {
-  const { data, error } = await supabase.functions.invoke('payment-sheet', {
+  const { data, error } = await supabase.functions.invoke("payment-sheet", {
     body: { amount },
   });
   if (data) {
     console.log(data);
     return data;
   }
-  Alert.alert('Error fetching payment sheet params');
+  Alert.alert("Error fetching payment sheet params");
   return {};
 };
 
 export const initialisePaymentSheet = async (amount: number) => {
-  console.log('Initialising payment sheet, for: ', amount);
+  console.log("Initialising payment sheet, for: ", amount);
 
   const { paymentIntent, publishableKey, customer, ephemeralKey } =
     await fetchPaymentSheetParams(amount);
@@ -26,12 +26,12 @@ export const initialisePaymentSheet = async (amount: number) => {
   if (!paymentIntent || !publishableKey) return;
 
   const result = await initPaymentSheet({
-    merchantDisplayName: 'notJust.dev',
+    merchantDisplayName: "notJust.dev",
     paymentIntentClientSecret: paymentIntent,
     customerId: customer,
     customerEphemeralKeySecret: ephemeralKey,
     defaultBillingDetails: {
-      name: 'Jane Doe',
+      name: "Jane Doe",
     },
   });
   console.log(result);

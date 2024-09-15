@@ -81,7 +81,7 @@ const CreateProductScreen = () => {
           resetFields();
           router.back();
         },
-      }
+      },
     );
   };
   const onUpdateProduct = async () => {
@@ -102,7 +102,7 @@ const CreateProductScreen = () => {
           resetFields();
           router.back();
         },
-      }
+      },
     );
   };
 

@@ -66,8 +66,6 @@ export const useOrderById = (id: string) => {
   });
 };
 
-
-
 //+ hook to CREATE or INSERT ROW in the DB(Changing in DB use Mutation)
 export const useInsertOrder = () => {
   const queryClient = useQueryClient();
@@ -127,7 +125,6 @@ export const useUpdateOrder = () => {
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ["orders"] }); // Updated to use an object with queryKey
       await queryClient.invalidateQueries({ queryKey: ["orders", id] }); // Updated to use an object with queryKey
-
     },
     // onError: log any errors that occur during the mutation
     onError(error) {

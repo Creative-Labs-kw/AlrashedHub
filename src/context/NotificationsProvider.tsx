@@ -1,9 +1,9 @@
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { registerForPushNotificationsAsync } from '@/lib/notifications';
-import { ExpoPushToken } from 'expo-notifications';
-import * as Notifications from 'expo-notifications';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from './AuthProvider';
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { registerForPushNotificationsAsync } from "@/lib/notifications";
+import { ExpoPushToken } from "expo-notifications";
+import * as Notifications from "expo-notifications";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "./AuthProvider";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -16,7 +16,8 @@ Notifications.setNotificationHandler({
 const NotificationProvider = ({ children }: PropsWithChildren) => {
   const [expoPushToken, setExpoPushToken] = useState<String | undefined>();
   const { profile } = useAuth();
-  const [notification, setNotification] = useState<Notifications.Notification>();
+  const [notification, setNotification] =
+    useState<Notifications.Notification>();
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
@@ -27,9 +28,9 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
 
       // Update the token in the database
       await supabase
-        .from('profiles')
+        .from("profiles")
         .update({ expo_push_token: newToken })
-        .eq('id', profile.id);
+        .eq("id", profile.id);
     }
   };
 
@@ -42,18 +43,22 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
     initializePushNotifications(); // Call async function to register for push notifications
 
     // Set up listeners for notifications
-    notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-      setNotification(notification);
-    });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log(response);
-    });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        // console.log(response);
+      });
 
     // Cleanup listeners on component unmount
     return () => {
       if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(
+          notificationListener.current,
+        );
       }
       if (responseListener.current) {
         Notifications.removeNotificationSubscription(responseListener.current);
@@ -61,8 +66,8 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
     };
   }, []); // Empty dependency array ensures this effect runs only once
 
-  console.log('Push token: ', expoPushToken);
-  console.log('Notification: ', notification);
+  // console.log('Push token: ', expoPushToken);
+  // console.log('Notification: ', notification);
 
   return <>{children}</>;
 };

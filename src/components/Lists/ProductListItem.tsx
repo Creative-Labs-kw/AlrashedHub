@@ -18,9 +18,9 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
 
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
-      <Pressable 
-        onPress={() => {}} 
-        style={[styles.container, { pointerEvents: 'auto' }]} // Add pointerEvents to style
+      <Pressable
+        onPress={() => {}}
+        style={[styles.container, { pointerEvents: "auto" }]} // Add pointerEvents to style
         role="button" // Replace accessibilityRole with role
       >
         <RemoteImage
@@ -39,14 +39,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 10, // size inside the container
+    padding: 10,
     borderRadius: 5,
-    shadowColor: "#000", // Color of the shadow
-    shadowOffset: { width: 0, height: 2 }, // Offset of the shadow
-    shadowOpacity: 0.25, // Opacity of the shadow
-    shadowRadius: 3.5, // Radius of the shadow
-    elevation: 5, // Android shadow effect
-    maxWidth: "50%", // if you have item alone don't let it take all the size(from the flex)
+    maxWidth: "50%",
   },
   title: {
     fontSize: 18,
