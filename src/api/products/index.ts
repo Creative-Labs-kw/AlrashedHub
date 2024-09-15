@@ -24,11 +24,11 @@ export const useProductById = (id: string) => {
         .from("products")
         .select("*")
         .eq("id", id)
-        .single(); // take first product and return it as object
+        .single();
       if (error) {
         throw new Error(error.message);
       }
-      return data;
+      return data as Product; // Cast the data to Product
     },
   });
 };
@@ -60,7 +60,8 @@ export const useInsertProduct = () => {
     },
     // onSuccess: after successful mutation, invalidate the "products" query to refresh the data
     async onSuccess() {
-      await queryClient.invalidateQueries(["products"]);
+      await queryClient.invalidateQueries({ queryKey: ["products"] }); // Updated to use an object with queryKey
+
     },
     // onError: log any errors that occur during the mutation
     onError(error) {
@@ -98,8 +99,9 @@ export const useUpdateProduct = () => {
 
     // onSuccess: after successful mutation, invalidate the "products" query to refresh the data
     async onSuccess(_, { id }) {
-      await queryClient.invalidateQueries(["products"]);
-      await queryClient.invalidateQueries(["products", id]); //update the product
+      await queryClient.invalidateQueries({ queryKey: ["products"] }); // Updated to use an object with queryKey
+      await queryClient.invalidateQueries({ queryKey: ["products",id] }); // Updated to use an object with queryKey
+
     },
     // onError: log any errors that occur during the mutation
     onError(error) {
@@ -120,7 +122,7 @@ export const useDeleteProduct = () => {
       }
     },
     async onSuccess() {
-      await queryClient.invalidateQueries(["products"]);
+      await queryClient.invalidateQueries({ queryKey: ["products"] }); // Updated to use an object with queryKey
     },
   });
 };

@@ -51,18 +51,16 @@ export const useOrderById = (id: string) => {
   return useQuery<Order>({
     queryKey: ["orders", id],
     queryFn: async () => {
-      try {
-        const { data, error } = await supabase
-          .from("orders")
-          .select("*,order_items(*,products(*))") // choose rows in table so you can take all the data needed for the order details
-          .eq("id", id)
-          .single(); // take first order and return it as object
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*,order_items(*,products(*))")
+        .eq("id", id)
+        .single();
 
-        return data;
-      } catch (error) {
-        console.error("useOrderById: error =", error);
-        throw new Error(error.message);
+      if (error || !data) { // Check for error or if data is null
+        throw new Error(error ? error.message : "Order not found"); // Throw error if order not found
       }
+      return data; // Ensure data is of type Order
     },
   });
 };
@@ -87,7 +85,7 @@ export const useInsertOrder = () => {
       return newProduct;
     },
     async onSuccess() {
-      await queryClient.invalidateQueries(["orders"]);
+      await queryClient.invalidateQueries({ queryKey: ["orders"] }); // Updated to use an object with queryKey
     },
   });
 };
@@ -124,8 +122,9 @@ export const useUpdateOrder = () => {
 
     // onSuccess: after successful mutation, invalidate the "Orders" query to refresh the data
     async onSuccess(_, { id }) {
-      await queryClient.invalidateQueries(["orders"]);
-      await queryClient.invalidateQueries(["orders", id]); //update the order
+      await queryClient.invalidateQueries({ queryKey: ["orders"] }); // Updated to use an object with queryKey
+      await queryClient.invalidateQueries({ queryKey: ["orders", id] }); // Updated to use an object with queryKey
+
     },
     // onError: log any errors that occur during the mutation
     onError(error) {
@@ -146,7 +145,7 @@ export const useDeleteOrder = () => {
       }
     },
     async onSuccess() {
-      await queryClient.invalidateQueries(["orders"]);
+      await queryClient.invalidateQueries({ queryKey: ["orders"] }); // Updated to use an object with queryKey
     },
   });
 };
