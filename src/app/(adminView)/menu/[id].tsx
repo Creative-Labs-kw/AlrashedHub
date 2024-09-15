@@ -9,16 +9,15 @@ import { Link, router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 
 const ProductDetailsScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Boolean state for loading
-  const { id } = useLocalSearchParams(); // Retrieves the id from the route parameters
+  const { id } = useLocalSearchParams() as { id: string }; // Ensure id is a string
   const { items, AddItemToCart } = useCart();
   const { data: chosenProduct, error, isLoading } = useProductById(id);
 
@@ -33,8 +32,15 @@ const ProductDetailsScreen = () => {
   const handleSubmit = () => {
     setIsSubmitting(true); // Start loading state
     setTimeout(() => {
-      // add items to cart with chosen product
-      AddItemToCart(chosenProduct);
+      // Check if chosenProduct is defined before adding to cart
+      if (chosenProduct) {
+        // Create a new object with the required properties
+        const productToAdd = {
+          ...chosenProduct,
+          created_at: new Date().toISOString(), // Add created_at with the current date
+        };
+        AddItemToCart(productToAdd);
+      }
       router.push("/cart");
       setIsSubmitting(false); // End loading state after the action is simulated
     }, 2000); // Simulate a delay of 2 seconds (e.g., simulating a network request)
@@ -43,7 +49,7 @@ const ProductDetailsScreen = () => {
   return (
     <View style={style.container}>
       {/* Sets the title of the screen dynamically based on the product name */}
-      <Stack.Screen options={{ title: chosenProduct.name }} />
+      <Stack.Screen options={{ title: chosenProduct?.name || "Product Details" }} />
       {/* Product editing screen */}
       <Stack.Screen
         options={{
@@ -74,7 +80,7 @@ const ProductDetailsScreen = () => {
         resizeMode="contain"
       />
       {/* Displays the product price */}
-      <Text style={style.price}>${chosenProduct.price}</Text>
+      <Text style={style.price}>${chosenProduct?.price || "N/A"}</Text> {/* Use optional chaining and fallback value */}
 
       {/* CustomButton handles the "Add to Cart" action, displays loading state when submitting */}
       <CustomButton
