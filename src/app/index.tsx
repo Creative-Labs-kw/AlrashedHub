@@ -11,20 +11,12 @@ import {
 
 //  For testing this should be the "Welcome Screen"
 const Index = () => {
-  const { session, error, loading, isAdmin } = useAuth();
+  const { session, loading, isAdmin } = useAuth();
 
   if (loading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#007bff" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>Error: {error}</Text>
       </View>
     );
   }

@@ -11,43 +11,57 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState(""); // Added email state
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState(""); // Added phone number state
 
   const signUpWithEmail = async () => {
     setLoading(true);
     console.log("Attempting to sign up...");
 
-    // Handle user sign up with Supabase
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      // Handle user sign up with Supabase Auth
+      const { data: signUpData, error: signUpError } =
+        await supabase.auth.signUp({
+          email,
+          password,
+        });
 
-    if (error) {
-      console.log("Sign up error:", error.message);
-      Alert.alert("Sign up error", error.message);
-    } else {
-      console.log("Sign up successful:", data);
+      if (signUpError) {
+        // Use type assertion to ensure the error is a SupabaseError
+        throw new Error((signUpError as Error).message);
+      }
 
-      // Optionally, store the full name in the user profile or in a separate table
-      const userId = data?.user?.id;
+      console.log("Sign up successful:", signUpData);
+
+      const userId = signUpData.user?.id;
       if (userId) {
         console.log("User ID:", userId);
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .upsert([{ id: userId, full_name: fullName }]); // Use upsert to handle both insert and update
+
+        // Insert or update the user's profile in the profiles table
+        const { error: profileError } = await supabase.from("profiles").upsert([
+          {
+            id: userId,
+            full_name: fullName,
+            phone: phoneNumber,
+            email: email, // Ensure the email is also added to the profile
+          },
+        ]);
 
         if (profileError) {
-          console.log("Profile insert error:", profileError.message);
-          Alert.alert("Profile error", profileError.message);
+          throw new Error((profileError as unknown as Error).message);
         } else {
           console.log("Profile inserted successfully");
+          Alert.alert("Success", "Account created successfully!");
+          // Optionally redirect or clear the form here
         }
       } else {
-        console.log("User ID not found");
+        throw new Error("User ID not found");
       }
+    } catch (error) {
+      // Use type assertion to ensure the error is an instance of Error
+      Alert.alert("Sign up error", (error as Error).message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -76,6 +90,14 @@ const SignUpScreen = () => {
         placeHolder="Enter your password"
         value={password}
         iconName="lock"
+      />
+
+      <CustomInput
+        title="Phone Number"
+        handelChangeText={setPhoneNumber} // Ensure you have a state for phone number
+        placeHolder="Enter your phone number"
+        value={phoneNumber} // Ensure you have a state for phone number
+        iconName="phone" // Use an appropriate icon for phone
       />
 
       <CustomButton
