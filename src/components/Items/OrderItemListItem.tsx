@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import { OrderItem } from "@/types";
-import { defaultPizzaImage } from "../Lists/ProductListItem";
+import { defaultPizzaImage } from "../Lists/StoreListItem";
 import Colors from "@/constants/Colors";
 import { Tables } from "@/database.types";
 import RemoteImage from "../image/RemoteImage";

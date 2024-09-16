@@ -3,9 +3,9 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { CartItem } from "@/types";
 import { useCart } from "@/context/CartProvider";
-import { defaultPizzaImage } from "./ProductListItem";
 import Colors from "@/constants/Colors";
 import RemoteImage from "../image/RemoteImage";
+import { defaultStoreImage } from "./StoreListItem";
 
 type CartListItemProps = {
   cartItem: CartItem;
@@ -17,7 +17,7 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
     <View style={styles.container}>
       {/* Displays the product image */}
       <RemoteImage
-        fallback={defaultPizzaImage}
+        fallback={defaultStoreImage}
         path={cartItem?.product.image}
         style={styles.image}
         resizeMode="contain"

@@ -1,5 +1,5 @@
-import { useProductList } from "@/api/products";
-import { ProductListItem } from "@/components/Lists/ProductListItem";
+import { useStoreList } from "@/api/stores";
+import { StoreListItem } from "@/components/Lists/StoreListItem";
 import {
   ActivityIndicator,
   FlatList,
@@ -13,10 +13,10 @@ export default function MenuScreen() {
   //+ call use Query + queryKey(forCaching) + queryFn + isLoading
   // Use the useQuery hook to fetch data from the "products" table
   const {
-    data: products, //reName it data to products
+    data: stores, //reName it data to products
     error,
     isLoading,
-  } = useProductList(); // call the Hook to fetch all data
+  } = useStoreList(); // call the Hook to fetch all data
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -27,9 +27,9 @@ export default function MenuScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={products}
-        renderItem={({ item }) => <ProductListItem product={item} />} //item is obj but only one item from the products obj
-        keyExtractor={(item) => item.id.toString()}
+        data={stores}
+        renderItem={({ item }) => <StoreListItem store={item} />} //item is obj but only one item from the products obj
+        keyExtractor={(item) => item.id}
         numColumns={2} //make more columns
         contentContainerStyle={{ gap: 10, padding: 5 }} //style of the list container + to put space between the border and list put padding
         columnWrapperStyle={{ gap: 10 }} // style each row alone

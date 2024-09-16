@@ -4,64 +4,65 @@ import CustomButton from "@/components/Buttons/CustomButton";
 import CustomInput from "@/components/Forms/CustomInput";
 import * as ImagePicker from "expo-image-picker";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import {
-  useDeleteProduct,
-  useInsertProduct,
-  useProductById,
-  useUpdateProduct,
-} from "@/api/products";
-import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
 import { supabase } from "@/lib/supabase";
 import { randomUUID } from "expo-crypto";
 import { decode } from "base64-arraybuffer";
 import * as FileSystem from "expo-file-system";
+import {
+  useDeleteStore,
+  useInsertStore,
+  useStoreById,
+  useUpdateStore,
+} from "@/api/stores";
+import { defaultStoreImage } from "@/components/Lists/StoreListItem";
+
 // Create Product screen(CreateItemScreen)
 const CreateProductScreen = () => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [deliveryPrice, setDeliveryPrice] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const { id } = useLocalSearchParams<{ id: string }>();
-  const isUpdating = !!id; // Check if we are updating an existing product based on whether a id is provided
+  const isUpdating = !!id; // Check if we are updating an existing product based on whether an id is provided
 
   // Call the mutate func to create or insert to the DB
-  const { mutate: insertProduct } = useInsertProduct();
-  // Call the mutate func to update product to the DB
-  const { mutate: updateProduct } = useUpdateProduct();
-  // Call the mutate func to get productById from the DB
-  const { data: updatingProduct } = useProductById(id);
-  //  Call Delete:
-  const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: insertStore } = useInsertStore();
+  // Call the mutate func to update Store in the DB
+  const { mutate: updateStore } = useUpdateStore();
+  // Call the mutate func to get StoreById from the DB
+  const { data: updatingStore } = useStoreById(id);
+  // Call Delete:
+  const { mutate: deleteStore } = useDeleteStore();
 
   useEffect(() => {
-    if (updatingProduct) {
-      setName(updatingProduct.name);
-      setPrice(updatingProduct.price.toString());
-      setImage(updatingProduct.image);
+    if (updatingStore) {
+      setStoreName(updatingStore.store_name);
+      setDeliveryPrice(updatingStore.delivery_price?.toString() || ""); // Handle possible null
+      setImage(updatingStore.store_logo); // Assuming store_logo is used for the image
     }
-  }, [updatingProduct]);
+  }, [updatingStore]);
 
   const validateInputs = () => {
     setErrorMsg(""); // reset it
-    if (!name) {
-      setErrorMsg("Name is Required");
+    if (!storeName) {
+      setErrorMsg("Store Name is Required");
       return false;
     }
-    if (!price) {
-      setErrorMsg("Price is required");
+    if (!deliveryPrice) {
+      setErrorMsg("Delivery Price is required");
       return false;
     }
     // IsNaN = must be num / parseFloat = convert string to num
-    if (isNaN(parseFloat(price))) {
-      setErrorMsg("Price is not a number");
+    if (isNaN(parseFloat(deliveryPrice))) {
+      setErrorMsg("Delivery Price is not a number");
       return false;
     }
     return true;
   };
 
   const resetFields = () => {
-    setName("");
-    setPrice("");
+    setStoreName("");
+    setDeliveryPrice("");
   };
 
   const onCreateProduct = async () => {
@@ -70,46 +71,47 @@ const CreateProductScreen = () => {
     }
     // save img in DB:
     const imagePath = await uploadImage();
-    insertProduct(
+    insertStore(
       {
-        name,
-        image: imagePath, //link the img chosen by the user to be uplaod to DB
-        price: parseFloat(price), //make it number
+        store_name: storeName,
+        store_logo: imagePath || "", // Provide a default empty string if imagePath is undefined
+        delivery_price: parseFloat(deliveryPrice), // make it number
       },
       {
         onSuccess: () => {
           resetFields();
           router.back();
         },
-      },
+      }
     );
   };
-  const onUpdateProduct = async () => {
+
+  const onUpdateStore = async () => {
     if (!validateInputs()) {
       return; //stop here
     }
     const imagePath = await uploadImage();
 
-    updateProduct(
+    updateStore(
       {
         id,
-        name,
-        image: imagePath,
-        price,
+        store_name: storeName,
+        store_logo: imagePath,
+        delivery_price: parseFloat(deliveryPrice),
       },
       {
         onSuccess: () => {
           resetFields();
           router.back();
         },
-      },
+      }
     );
   };
 
   const onSubmit = () => {
     if (isUpdating) {
-      //update
-      onUpdateProduct();
+      // update
+      onUpdateStore();
     } else {
       onCreateProduct();
     }
@@ -126,14 +128,12 @@ const CreateProductScreen = () => {
       return;
     }
     let result = await ImagePicker.launchImageLibraryAsync({
-      // here you can add the more options like (allowsMultipleSelection)
+      // here you can add more options like (allowsMultipleSelection)
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true, // Enable editing option,
+      allowsEditing: true, // Enable editing option
       aspect: [4, 3],
-      quality: 1, //1 = full quality less is lower quality(0.5)
+      quality: 1, //1 = full quality; less is lower quality (0.5)
     });
-
-    // console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -143,16 +143,16 @@ const CreateProductScreen = () => {
   // Delete / and check deleting:
   const onDelete = () => {
     if (!id) {
-      console.error("Product ID is undefined or null");
+      console.error("Store ID is undefined or null");
       return;
     }
-    deleteProduct(id, {
+    deleteStore(id, {
       onSuccess: () => {
         resetFields();
         router.replace("/(adminView)");
       },
       onError: (error) => {
-        console.error("Error deleting product:", error);
+        console.error("Error deleting Store:", error);
       },
     });
   };
@@ -189,6 +189,7 @@ const CreateProductScreen = () => {
       return data.path;
     }
   };
+
   return (
     <View style={{ flex: 1 }}>
       <Stack.Screen
@@ -197,7 +198,7 @@ const CreateProductScreen = () => {
         }}
       />
       <Image
-        source={{ uri: image || defaultPizzaImage }} //use the default img if there is not
+        source={{ uri: image || defaultStoreImage }} // use the default img if there is none
         style={{ width: "50%", aspectRatio: 1, alignSelf: "center" }}
       />
 
@@ -208,23 +209,23 @@ const CreateProductScreen = () => {
         Select Img
       </Text>
       <CustomInput
-        value={name}
-        title="Name"
-        placeHolder="ex : abdullah"
-        handelChangeText={setName}
+        value={storeName}
+        title="Store Name"
+        placeHolder="ex : Abdullah's Store"
+        handelChangeText={setStoreName}
       />
       <CustomInput
-        value={price}
-        title="Price"
+        value={deliveryPrice}
+        title="Delivery Price"
         placeHolder="ex : 10KD"
-        handelChangeText={setPrice}
+        handelChangeText={setDeliveryPrice}
       />
       <Text style={{ color: "red", fontSize: 20 }}> {errorMsg}</Text>
       <CustomButton
-        title={isUpdating ? "update/edit" : "Create product"} // Set title based on whether a id is present (update/edit vs. create product)
+        title={isUpdating ? "Update/Edit" : "Create Product"} // Set title based on whether an id is present (update/edit vs. create product)
         handelPress={onSubmit}
       />
-      {/* only id edit or updating show this */}
+      {/* Only show this if updating */}
       {isUpdating && (
         <CustomButton
           title="Delete Product"

@@ -1,7 +1,7 @@
-import { useProductById } from "@/api/products";
+import { useStoreById } from "@/api/stores";
 import CustomButton from "@/components/Buttons/CustomButton";
 import RemoteImage from "@/components/image/RemoteImage";
-import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
+import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 import Colors from "@/constants/Colors";
 import { useCart } from "@/context/CartProvider";
 import { FontAwesome } from "@expo/vector-icons";
@@ -15,31 +15,32 @@ import {
   View,
 } from "react-native";
 
-const ProductDetailsScreen = () => {
+const StoreDetailsScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Boolean state for loading
   const { id } = useLocalSearchParams() as { id: string }; // Ensure id is a string
-  const { items, AddItemToCart } = useCart();
-  const { data: chosenProduct, error, isLoading } = useProductById(id);
+  const { items, AddItemToCart } = useCart(); // Assuming this is still relevant
+  const { data: chosenStore, error, isLoading } = useStoreById(id);
 
   if (isLoading) {
     return <ActivityIndicator />;
   }
   if (error) {
-    return <Text>Failed to fetch Products</Text>;
+    return <Text>Failed to fetch Store</Text>;
   }
 
-  // Handles the button press, simulates adding the product to the cart with a delay
+  // Handles the button press, simulates adding the store to the cart with a delay
   const handleSubmit = () => {
     setIsSubmitting(true); // Start loading state
     setTimeout(() => {
-      // Check if chosenProduct is defined before adding to cart
-      if (chosenProduct) {
+      // Check if chosenStore is defined before adding to cart
+      if (chosenStore) {
         // Create a new object with the required properties
-        const productToAdd = {
-          ...chosenProduct,
+        const storeToAdd = {
+          ...chosenStore,
           created_at: new Date().toISOString(), // Add created_at with the current date
+          price: chosenStore.delivery_price || 0, // Ensure price is included and default to 0 if null
         };
-        AddItemToCart(productToAdd);
+        AddItemToCart(storeToAdd); // Assuming the store can be added to cart
       }
       router.push("/cart");
       setIsSubmitting(false); // End loading state after the action is simulated
@@ -48,17 +49,17 @@ const ProductDetailsScreen = () => {
 
   return (
     <View style={style.container}>
-      {/* Sets the title of the screen dynamically based on the product name */}
+      {/* Sets the title of the screen dynamically based on the store name */}
       <Stack.Screen
-        options={{ title: chosenProduct?.name || "Product Details" }}
+        options={{ title: chosenStore?.store_name || "Store Details" }}
       />
-      {/* Product editing screen */}
+      {/* Store editing screen */}
       <Stack.Screen
         options={{
-          title: "Edit Product",
+          title: "Edit Store",
           headerRight: () => (
             <View style={style.headerIconsContainer}>
-              <Link href={`/(adminView)/menu/createItem?id=${id}`} asChild>
+              <Link href={`/(adminView)/stores/createStore?id=${id}`} asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <FontAwesome
@@ -74,16 +75,25 @@ const ProductDetailsScreen = () => {
           ),
         }}
       />
-      {/* Displays the product image */}
+      {/* Displays the store logo */}
       <RemoteImage
-        fallback={defaultPizzaImage}
-        path={chosenProduct?.image}
+        fallback={defaultStoreImage}
+        path={chosenStore?.store_logo}
         style={style.image}
         resizeMode="contain"
       />
-      {/* Displays the product price */}
-      <Text style={style.price}>${chosenProduct?.price || "N/A"}</Text>{" "}
-      {/* Use optional chaining and fallback value */}
+      {/* Displays the store details */}
+      <Text style={style.title}>{chosenStore?.store_name || "N/A"}</Text>
+      <Text style={style.description}>
+        {chosenStore?.store_description || "N/A"}
+      </Text>
+      <Text style={style.phone}>{chosenStore?.phone_number || "N/A"}</Text>
+      <Text style={style.deliveryTime}>
+        Delivery Time: {chosenStore?.delivery_time || "N/A"}
+      </Text>
+      <Text style={style.deliveryPrice}>
+        Delivery Price: ${chosenStore?.delivery_price || "N/A"}
+      </Text>
       {/* CustomButton handles the "Add to Cart" action, displays loading state when submitting */}
       <CustomButton
         title={"Add To Cart"}
@@ -95,20 +105,43 @@ const ProductDetailsScreen = () => {
   );
 };
 
-export default ProductDetailsScreen;
+export default StoreDetailsScreen;
 
 const style = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     flex: 1,
+    padding: 10, // Added padding for better spacing
   },
   image: {
     width: "100%",
     aspectRatio: 1,
   },
-  price: {
-    fontSize: 18,
+  title: {
+    fontSize: 22,
     fontWeight: "bold",
+    marginVertical: 10,
+  },
+  description: {
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 5,
+  },
+  phone: {
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 5,
+  },
+  deliveryTime: {
+    fontSize: 14,
+    color: Colors.light.tint,
+    marginVertical: 5,
+  },
+  deliveryPrice: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: Colors.light.tint,
+    marginVertical: 5,
   },
   headerIconsContainer: {
     flexDirection: "row",

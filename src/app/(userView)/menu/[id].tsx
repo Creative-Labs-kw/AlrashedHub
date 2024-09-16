@@ -1,7 +1,8 @@
-import { useProductById } from "@/api/products";
+import { useStoreById } from "@/api/stores";
 import CustomButton from "@/components/Buttons/CustomButton";
 import RemoteImage from "@/components/image/RemoteImage";
-import { defaultPizzaImage } from "@/components/Lists/ProductListItem";
+import { defaultStoreImage } from "@/components/Lists/StoreListItem";
+
 import { useCart } from "@/context/CartProvider";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
@@ -11,7 +12,7 @@ const ProductDetailsScreen = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // Boolean state for loading
   const { id } = useLocalSearchParams(); // Retrieves the id from the route parameters
   const productId = Array.isArray(id) ? id[0] : id; // Ensure id is a string
-  const { data: chosenProduct, error, isLoading } = useProductById(productId);
+  const { data: chosenProduct, error, isLoading } = useStoreById(productId);
   const { items, AddItemToCart } = useCart();
 
   if (isLoading) {
@@ -48,7 +49,7 @@ const ProductDetailsScreen = () => {
       <Stack.Screen options={{ title: chosenProduct?.name || "Product" }} />
       {/* Displays the product image */}
       <RemoteImage
-        fallback={defaultPizzaImage}
+        fallback={defaultStoreImage}
         path={chosenProduct?.image}
         style={style.image}
         resizeMode="contain"
