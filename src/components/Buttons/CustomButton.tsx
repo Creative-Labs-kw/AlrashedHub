@@ -46,7 +46,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: "#3b82f6", // Equivalent to Tailwind's bg-secondary
+    backgroundColor: "#D8BFD8", // Equivalent to Tailwind's bg-secondary
     borderRadius: 12, // Equivalent to rounded-xl
     minHeight: 62, // Equivalent to min-h-[62px]
     justifyContent: "center", // Equivalent to justify-center

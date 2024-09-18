@@ -11,6 +11,7 @@ interface CustomHeaderProps {
   rightIconName?: keyof typeof Ionicons.glyphMap;
   onLeftIconPress?: () => void;
   onRightIconPress?: () => void;
+  HeaderText?: string;
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({
@@ -20,9 +21,11 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
   rightIconName,
   onLeftIconPress,
   onRightIconPress,
+  HeaderText,
 }) => {
   return (
     <View style={styles.headerContainer}>
+      <Text>{HeaderText}</Text>
       {leftIconName && (
         <TouchableOpacity onPress={onLeftIconPress} style={styles.iconButton}>
           <Ionicons name={leftIconName} size={24} color="black" />

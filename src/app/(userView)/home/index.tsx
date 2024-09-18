@@ -1,7 +1,7 @@
 import { useStoreList } from "@/api/stores";
 import { StoreListItem } from "@/components/Lists/StoreListItem";
 import { useLocation } from "@/hooks/useLocation";
-import React, { useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -10,16 +10,22 @@ import {
   Text,
   View,
 } from "react-native";
-
 import CustomHeader from "@/components/CustomHeader.tsx";
 import SearchBar from "@/components/SearchBar";
 import { router } from "expo-router";
+import { useSearch } from "@/hooks/useSearch"; // Import the custom hook
 
 const HomeScreen = () => {
   const { location, errorMsg } = useLocation();
   const { data: stores, error, isLoading } = useStoreList();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const {
+    searchQuery,
+    suggestions,
+    handleSearch,
+    handleSuggestionSelect,
+    filteredData: filteredStores,
+  } = useSearch(stores, "store_name");
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -27,33 +33,6 @@ const HomeScreen = () => {
   if (error) {
     return <Text>Failed to fetch Products</Text>;
   }
-
-  // Filter stores based on search query
-  const filteredStores = (stores || []).filter((store) =>
-    store.store_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Generate suggestions based on the search query
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    const lowerCaseQuery = query.toLowerCase();
-    if (lowerCaseQuery.length > 0 && stores) {
-      // Check if stores is defined
-      const newSuggestions = stores
-        .filter((store) =>
-          store.store_name.toLowerCase().includes(lowerCaseQuery)
-        )
-        .map((store) => store.store_name);
-      setSuggestions(Array.from(new Set(newSuggestions))); // Remove duplicates
-    } else {
-      setSuggestions([]);
-    }
-  };
-
-  const handleSuggestionSelect = (suggestion: string) => {
-    setSearchQuery(suggestion);
-    setSuggestions([]);
-  };
 
   return (
     <SafeAreaView style={styles.container}>

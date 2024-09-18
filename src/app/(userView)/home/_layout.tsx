@@ -10,6 +10,7 @@ const HomeStack = () => {
       }}
     >
       <Stack.Screen name="index" options={{ title: "HomeScreen" }} />
+      <Stack.Screen name="item/[itemId]" options={{ title: "itemDEtails" }} />
       <Stack.Screen
         name="store/storeDetails/[storeId]"
         options={{ presentation: "modal" }}
