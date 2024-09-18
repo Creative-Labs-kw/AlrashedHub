@@ -75,7 +75,13 @@ const CreateProductScreen = () => {
       {
         store_name: storeName,
         store_logo: imagePath || "", // Provide a default empty string if imagePath is undefined
-        delivery_price: parseFloat(deliveryPrice), // make it number
+        delivery_price: deliveryPrice
+          ? parseFloat(deliveryPrice).toString()
+          : "0", // Default to "0" if undefined
+        store_description: "", // Add appropriate value
+        phone_number: "", // Add appropriate value
+        delivery_time: "", // Add appropriate value
+        owner: "", // Add appropriate value
       },
       {
         onSuccess: () => {
@@ -97,7 +103,7 @@ const CreateProductScreen = () => {
         id,
         store_name: storeName,
         store_logo: imagePath,
-        delivery_price: parseFloat(deliveryPrice),
+        delivery_price: parseFloat(deliveryPrice).toString(), // Convert to string
       },
       {
         onSuccess: () => {

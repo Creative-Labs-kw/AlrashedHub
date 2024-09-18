@@ -18,14 +18,14 @@ export const useStoreList = () => {
 
 //+ GET / FETCH by id
 // Hook for GET / Fetching Store by ID
-export const useStoreById = (id: string) => {
+export const useStoreById = (storeId: string) => {
   return useQuery({
-    queryKey: ["stores", id],
+    queryKey: ["stores", storeId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("stores")
         .select("*")
-        .eq("store_id", id)
+        .eq("store_id", storeId)
         .single();
       if (error) {
         throw new Error(error.message);

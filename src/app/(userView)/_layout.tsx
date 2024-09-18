@@ -35,13 +35,11 @@ export default function TabLayout() {
       {/* To remove the tab from the tab bar not using */}
       <Tabs.Screen name="index" options={{ href: null }} />
       <Tabs.Screen
-        name="menu"
+        name="home"
         options={{
-          title: "Menu",
+          title: "Home",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="cutlery" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <Tabs.Screen

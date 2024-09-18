@@ -33,7 +33,7 @@ const Index = () => {
     <View style={styles.container}>
       <Link href="/(userView)" asChild>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Go to User View</Text>
+          <Text style={styles.buttonText}>Go to Home</Text>
         </TouchableOpacity>
       </Link>
     </View>
