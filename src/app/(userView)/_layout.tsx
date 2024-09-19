@@ -6,6 +6,7 @@ import { useClientOnlyValue } from "../../components/useClientOnlyValue";
 import Colors from "../../constants/Colors";
 import { useAuth } from "@/context/AuthProvider";
 
+//+ USER VIEW LAYOUT
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -34,6 +35,17 @@ export default function TabLayout() {
     >
       {/* To remove the tab from the tab bar not using */}
       <Tabs.Screen name="index" options={{ href: null }} />
+      <Tabs.Screen name="store/[storeId]" options={{ href: null }} />
+      <Tabs.Screen
+        name="store/storeDetails/[storeId]"
+        options={{ href: null }}
+      />
+      <Tabs.Screen name="cart/index" options={{ href: null }} />
+
+      <Tabs.Screen name="item/[itemId]" options={{ href: null }} />
+      <Tabs.Screen name="cart/cartList" options={{ href: null }} />
+      <Tabs.Screen name="cart/cartDetails" options={{ href: null }} />
+
       <Tabs.Screen
         name="home"
         options={{

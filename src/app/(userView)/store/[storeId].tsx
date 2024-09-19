@@ -7,7 +7,13 @@ import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 import SearchBar from "@/components/SearchBar";
 import { useCart } from "@/context/CartProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { router, Stack, useLocalSearchParams, useSegments } from "expo-router";
+import {
+  router,
+  Stack,
+  Tabs,
+  useLocalSearchParams,
+  useSegments,
+} from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
@@ -55,6 +61,7 @@ const StoreItemsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Tabs.Screen name="index" options={{ href: null }} />
       <CustomHeader
         rightIconName="menu"
         onRightIconPress={() =>

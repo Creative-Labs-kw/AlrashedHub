@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, Tabs, useLocalSearchParams } from "expo-router";
 import { useStoreById } from "@/api/stores";
 import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 
@@ -37,6 +37,10 @@ const StoreDetailsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Stack.Screen
+        name="store/storeDetails/[storeId]"
+        options={{ presentation: "modal" }}
+      />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.imageContainer}>
           <Image
