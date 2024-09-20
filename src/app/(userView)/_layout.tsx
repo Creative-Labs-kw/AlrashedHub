@@ -51,6 +51,7 @@ export default function TabLayout() {
       <Tabs.Screen name="item/[itemId]" options={{ href: null }} />
       <Tabs.Screen name="cart/cartList" options={{ href: null }} />
       <Tabs.Screen name="cart/cartDetails" options={{ href: null }} />
+      <Tabs.Screen name="orders" options={{ href: null }} />
 
       <Tabs.Screen
         name="home"
@@ -61,10 +62,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="orders"
+        name="F_Notifications/index"
         options={{
-          title: "Orders",
-          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+          title: "F_Notifications",
+          tabBarIcon: ({ color }) => <TabBarIcon name="bell" color={color} />,
           headerShown: false,
         }}
       />

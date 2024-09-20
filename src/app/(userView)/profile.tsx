@@ -25,6 +25,7 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <Button onPress={handleSignOut} title="Sign out" />
+      <Button onPress={() => router.push("/orders")} title="My Orders" />
     </View>
   );
 };
