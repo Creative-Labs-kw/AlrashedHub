@@ -18,7 +18,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   const router = useRouter();
 
   const handlePress = () => {
-    router.push(`/home/item/${item.item_id}`); // Navigate to ItemDetails screen
+    router.push(`/item/${item.item_id}`); // Navigate to ItemDetails screen
   };
 
   return (

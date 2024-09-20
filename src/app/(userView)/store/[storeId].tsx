@@ -1,7 +1,7 @@
 import { useStoreItems } from "@/api/items";
 import { useStoreById } from "@/api/stores";
 import ItemCard from "@/components/Cards/ItemCard";
-import CustomHeader from "@/components/CustomHeader.tsx";
+import CustomHeader from "@/components/CustomHeader";
 import RemoteImage from "@/components/image/RemoteImage";
 import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 import SearchBar from "@/components/SearchBar";
@@ -61,13 +61,10 @@ const StoreItemsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Tabs.Screen name="index" options={{ href: null }} />
       <CustomHeader
         rightIconName="menu"
         onRightIconPress={() =>
-          router.push(
-            `/${segments[0]}/home/store/storeDetails/${store?.store_id}`
-          )
+          router.push(`/${segments[0]}/store/storeDetails/${store.store_id}`)
         }
         HeaderText={store?.store_name}
       />

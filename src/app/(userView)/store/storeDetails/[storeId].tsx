@@ -1,17 +1,18 @@
+import { useStoreById } from "@/api/stores";
+import CustomHeader from "@/components/CustomHeader";
+import { defaultStoreImage } from "@/components/Lists/StoreListItem";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import {
+  Image,
+  Linking,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  ScrollView,
-  Image,
   TouchableOpacity,
-  Linking,
+  View,
 } from "react-native";
-import { Stack, Tabs, useLocalSearchParams } from "expo-router";
-import { useStoreById } from "@/api/stores";
-import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 
 const StoreDetailsScreen = () => {
   const { storeId } = useLocalSearchParams(); // Retrieves the storeId from the route parameters
@@ -37,9 +38,10 @@ const StoreDetailsScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        name="store/storeDetails/[storeId]"
-        options={{ presentation: "modal" }}
+      <CustomHeader
+        title={store?.store_name}
+        leftIconName="arrow-back"
+        onLeftIconPress={() => router.replace(`/(userView)/store/${storeId}`)}
       />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.imageContainer}>

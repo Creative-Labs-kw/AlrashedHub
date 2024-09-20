@@ -1,10 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Redirect, Tabs } from "expo-router";
+import { Redirect, router, Tabs } from "expo-router";
 import React from "react";
 import { useColorScheme } from "react-native";
 import { useClientOnlyValue } from "../../components/useClientOnlyValue";
 import Colors from "../../constants/Colors";
 import { useAuth } from "@/context/AuthProvider";
+import { Ionicons } from "@expo/vector-icons";
 
 //+ USER VIEW LAYOUT
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -35,13 +36,18 @@ export default function TabLayout() {
     >
       {/* To remove the tab from the tab bar not using */}
       <Tabs.Screen name="index" options={{ href: null }} />
-      <Tabs.Screen name="store/[storeId]" options={{ href: null }} />
+      <Tabs.Screen
+        name="store/[storeId]"
+        options={{ href: null, headerShown: false }}
+      />
       <Tabs.Screen
         name="store/storeDetails/[storeId]"
-        options={{ href: null }}
+        options={{
+          href: null,
+          headerShown: false,
+        }}
       />
       <Tabs.Screen name="cart/index" options={{ href: null }} />
-
       <Tabs.Screen name="item/[itemId]" options={{ href: null }} />
       <Tabs.Screen name="cart/cartList" options={{ href: null }} />
       <Tabs.Screen name="cart/cartDetails" options={{ href: null }} />

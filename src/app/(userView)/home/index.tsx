@@ -10,7 +10,7 @@ import {
   Text,
   View,
 } from "react-native";
-import CustomHeader from "@/components/CustomHeader.tsx";
+import CustomHeader from "@/components/CustomHeader";
 import SearchBar from "@/components/SearchBar";
 import { router } from "expo-router";
 import { useSearch } from "@/hooks/useSearch"; // Import the custom hook

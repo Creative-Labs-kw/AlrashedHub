@@ -1,9 +1,3 @@
-import CustomButton from "@/components/Buttons/CustomButton";
-import { defaultStoreImage } from "@/components/Lists/StoreListItem";
-import { useCart } from "@/context/CartProvider";
-import { supabase } from "@/lib/supabase";
-import { Ionicons } from "@expo/vector-icons";
-import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,6 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useCart } from "@/context/CartProvider";
+import { supabase } from "@/lib/supabase";
+import { router, useLocalSearchParams } from "expo-router";
+import CustomButton from "@/components/Buttons/CustomButton";
+import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 
 const ItemDetails: React.FC = () => {
   const { itemId } = useLocalSearchParams();
@@ -86,15 +86,14 @@ const ItemDetails: React.FC = () => {
   };
 
   const handleAddToCart = () => {
-    AddItemToCart(item); // Pass quantity
-    router.push(`/cart`);
+    AddItemToCart({ ...item, quantity }); // Pass quantity
+    router.push(`/(userView)/cart`);
   };
 
   const totalPrice = (itemPrice * quantity).toFixed(2);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen name="item/[itemId]" options={{ title: "itemDetails" }} />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <Image
           source={{ uri: item.item_img || defaultStoreImage }}

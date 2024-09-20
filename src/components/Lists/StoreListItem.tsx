@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import { Tables } from "@/database.types";
-import { Link, useSegments } from "expo-router";
+import { Link, Stack, useSegments } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import RemoteImage from "../image/RemoteImage";
 
@@ -16,7 +16,7 @@ export const StoreListItem = ({ store }: StoreListItemProps) => {
   const segments = useSegments();
 
   return (
-    <Link href={`/${segments[0]}/home/store/${store.store_id}`} asChild>
+    <Link href={`/${segments[0]}/store/${store.store_id}`} asChild>
       <Pressable onPress={() => {}} style={styles.container} role="button">
         <View style={styles.row}>
           <RemoteImage
