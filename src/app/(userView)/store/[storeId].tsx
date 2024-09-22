@@ -1,19 +1,15 @@
 import { useStoreItems } from "@/api/items";
 import { useStoreById } from "@/api/stores";
+import CustomButton from "@/components/Buttons/CustomButton";
 import ItemCard from "@/components/Cards/ItemCard";
 import CustomHeader from "@/components/CustomHeader";
 import RemoteImage from "@/components/image/RemoteImage";
 import { defaultStoreImage } from "@/components/Lists/StoreListItem";
 import SearchBar from "@/components/SearchBar";
-import { useCart } from "@/context/CartProvider";
+import { useSearch } from "@/hooks/useSearch";
+import { ValidSegments } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  router,
-  Stack,
-  Tabs,
-  useLocalSearchParams,
-  useSegments,
-} from "expo-router";
+import { Href, router, useLocalSearchParams, useSegments } from "expo-router";
 import React from "react";
 import {
   ActivityIndicator,
@@ -23,8 +19,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { useSearch } from "@/hooks/useSearch"; // Import the custom hook
-import CustomButton from "@/components/Buttons/CustomButton";
 
 const StoreItemsScreen = () => {
   const { storeId } = useLocalSearchParams();
@@ -35,14 +29,15 @@ const StoreItemsScreen = () => {
     error: storeError,
     isLoading: storeLoading,
   } = useStoreById(storeIdString);
+
   const {
-    data: items,
+    data: items = [],
     error: itemsError,
     isLoading: itemsLoading,
   } = useStoreItems(storeIdString);
 
-  const { AddItemToCart } = useCart();
-  const segments = useSegments();
+  const segment = useSegments();
+  const segmentOne = segment[0] as ValidSegments;
 
   const {
     searchQuery,
@@ -55,18 +50,25 @@ const StoreItemsScreen = () => {
   if (storeLoading || itemsLoading) {
     return <ActivityIndicator />;
   }
+
   if (storeError || itemsError) {
     return <Text>Failed to fetch store details or items</Text>;
   }
+
+  // Safely accessing store properties
+  const storeIdToUse = store?.store_id;
+  const storeName = store?.store_name;
 
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
         rightIconName="menu"
         onRightIconPress={() =>
-          router.push(`/${segments[0]}/store/storeDetails/${store.store_id}`)
+          router.push(
+            `/${segmentOne}/store/storeDetails/${storeIdToUse}` as Href
+          )
         }
-        HeaderText={store?.store_name}
+        HeaderText={storeName || "Store Name"} // Fallback text
       />
       <SearchBar
         onSearch={handleSearch}
@@ -89,12 +91,17 @@ const StoreItemsScreen = () => {
         </View>
       </View>
 
-      <FlatList
-        data={filteredItems}
-        renderItem={({ item }) => <ItemCard item={item} />}
-        keyExtractor={(item) => item.item_id}
-        contentContainerStyle={styles.listContainer}
-      />
+      {items.length === 0 ? (
+        <Text>No items available in this store</Text>
+      ) : (
+        <FlatList
+          data={filteredItems}
+          renderItem={({ item }) => <ItemCard item={item} />}
+          keyExtractor={(item) => item.item_id}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
+
       <CustomButton
         title="Cart Go"
         handelPress={() => router.push("/cart")}

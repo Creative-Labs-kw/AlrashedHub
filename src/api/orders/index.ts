@@ -149,3 +149,19 @@ export const useDeleteOrder = () => {
     },
   });
 };
+
+export const useInsertOrderItems = () => {
+  return useMutation({
+    async mutationFn(items: InsertTables<"orders">[]) {
+      const { error, data: newProduct } = await supabase
+        .from("orders")
+        .insert(items)
+        .select();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+      return newProduct;
+    },
+  });
+};

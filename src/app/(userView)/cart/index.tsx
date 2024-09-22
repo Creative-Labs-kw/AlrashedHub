@@ -3,11 +3,9 @@ import React from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import CustomButton from "@/components/Buttons/CustomButton";
 import CartItemCard from "@/components/Cards/CartItemCard";
-import { Tabs } from "expo-router";
 
 const CartScreen = () => {
-  const { items, total, checkout } = useCart();
-  console.log({ items });
+  const { items, total, updateQuantity, checkout } = useCart();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,8 +15,16 @@ const CartScreen = () => {
       ) : (
         <FlatList
           data={items}
-          renderItem={({ item }) => <CartItemCard item={item} />} // Render cart items
-          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CartItemCard
+              key={item.item_id}
+              item={item}
+              onIncreaseQuantity={() => updateQuantity(item.item_id, 1)}
+              onDecreaseQuantity={() => updateQuantity(item.item_id, -1)}
+              onDelete={() => updateQuantity(item.item_id, -item.quantity)}
+            />
+          )}
+          keyExtractor={(item) => item.item_id}
           contentContainerStyle={styles.listContainer}
         />
       )}

@@ -30,7 +30,7 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
       await supabase
         .from("profiles")
         .update({ expo_push_token: newToken })
-        .eq("id", profile.id);
+        .eq("id", profile?.id);
     }
   };
 
@@ -57,7 +57,7 @@ const NotificationProvider = ({ children }: PropsWithChildren) => {
     return () => {
       if (notificationListener.current) {
         Notifications.removeNotificationSubscription(
-          notificationListener.current,
+          notificationListener.current
         );
       }
       if (responseListener.current) {

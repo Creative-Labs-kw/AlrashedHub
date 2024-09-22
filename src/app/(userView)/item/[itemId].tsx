@@ -15,17 +15,11 @@ import { supabase } from "@/lib/supabase";
 import { router, useLocalSearchParams } from "expo-router";
 import CustomButton from "@/components/Buttons/CustomButton";
 import { defaultStoreImage } from "@/components/Lists/StoreListItem";
+import { Item } from "@/types";
 
 const ItemDetails: React.FC = () => {
   const { itemId } = useLocalSearchParams();
-  const [item, setItem] = useState<{
-    item_id: string;
-    item_img: string;
-    item_name: string;
-    item_description: string;
-    price: string;
-    quantity: number;
-  } | null>(null);
+  const [item, setItem] = useState<Item | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,11 +37,24 @@ const ItemDetails: React.FC = () => {
           .eq("item_id", itemId)
           .single();
 
-        if (error) {
-          throw error;
+        if (error || !data) {
+          throw error || new Error("No item found");
         }
 
-        setItem(data);
+        // Ensure the data matches the Item type
+        const fetchedItem: Item = {
+          item_id: data.item_id,
+          item_img: data.item_img || defaultStoreImage,
+          item_name: data.item_name,
+          item_description: data.item_description || "No description available",
+          price: data.price,
+          quantity: data.quantity ?? 1,
+          store_id: data.store_id || null,
+          created_at: data.created_at || null, // Adjust based on your data structure
+          updated_at: data.updated_at || null, // Adjust based on your data structure
+        };
+
+        setItem(fetchedItem);
       } catch (error) {
         console.error("Error fetching item details:", error);
         setError("Failed to load item details.");
@@ -71,10 +78,8 @@ const ItemDetails: React.FC = () => {
     return <Text style={styles.loadingText}>Item not found</Text>;
   }
 
-  const itemPrice = parseFloat(item.price);
-
   const handleIncrease = () => {
-    if (quantity < item.quantity) {
+    if (item.quantity !== null && quantity < (item.quantity || 1)) {
       setQuantity(quantity + 1);
     }
   };
@@ -86,11 +91,19 @@ const ItemDetails: React.FC = () => {
   };
 
   const handleAddToCart = () => {
-    AddItemToCart({ ...item, quantity }); // Pass quantity
+    if (!item) return;
+
+    AddItemToCart({
+      ...item,
+      quantity,
+      created_at: null, // Set defaults as necessary
+      updated_at: null, // Set defaults as necessary
+    });
+
     router.push(`/(userView)/cart`);
   };
 
-  const totalPrice = (itemPrice * quantity).toFixed(2);
+  const totalPrice = (item.price * quantity).toFixed(2);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -117,7 +130,7 @@ const ItemDetails: React.FC = () => {
             <Text style={styles.quantity}>{quantity}</Text>
             <TouchableOpacity
               onPress={handleIncrease}
-              disabled={quantity >= item.quantity}
+              disabled={quantity >= (item.quantity || 1)} // Fallback to 1
               style={styles.iconButton}
             >
               <Ionicons name="add-circle-outline" size={24} color="black" />
@@ -129,9 +142,7 @@ const ItemDetails: React.FC = () => {
             containerStyles={styles.button}
           />
           <CustomButton
-            handelPress={() => {
-              router.back();
-            }}
+            handelPress={() => router.back()}
             title="Back button"
             containerStyles={styles.backButton}
           />

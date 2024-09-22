@@ -1,9 +1,10 @@
-// hooks/useSearch.ts
 import { useMemo, useState } from "react";
 
-export const useSearch = <T extends { [key: string]: string }>(
+// Make the type constraint more flexible, allowing any shape of object,
+// but ensure that the value at searchKey is a string.
+export const useSearch = <T extends Record<string, any>>(
     data: T[] | undefined,
-    searchKey: string,
+    searchKey: keyof T & string, // Ensure searchKey is a valid key of T that holds a string
 ) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -12,9 +13,13 @@ export const useSearch = <T extends { [key: string]: string }>(
     const filteredData = useMemo(() => {
         if (!data) return [];
         const lowerCaseQuery = searchQuery.toLowerCase();
-        return data.filter((item) =>
-            item[searchKey].toLowerCase().includes(lowerCaseQuery)
-        );
+        return data.filter((item) => {
+            const value = item[searchKey];
+            if (typeof value === "string") {
+                return value.toLowerCase().includes(lowerCaseQuery);
+            }
+            return false;
+        });
     }, [searchQuery, data, searchKey]);
 
     // Generate suggestions based on the search query
@@ -23,10 +28,12 @@ export const useSearch = <T extends { [key: string]: string }>(
         if (query.length > 0 && data) {
             const lowerCaseQuery = query.toLowerCase();
             const newSuggestions = data
-                .filter((item) =>
-                    item[searchKey].toLowerCase().includes(lowerCaseQuery)
-                )
-                .map((item) => item[searchKey]);
+                .filter((item) => {
+                    const value = item[searchKey];
+                    return typeof value === "string" &&
+                        value.toLowerCase().includes(lowerCaseQuery);
+                })
+                .map((item) => item[searchKey] as string);
             setSuggestions(Array.from(new Set(newSuggestions))); // Remove duplicates
         } else {
             setSuggestions([]);

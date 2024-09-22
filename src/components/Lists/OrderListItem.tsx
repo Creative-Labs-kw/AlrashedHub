@@ -15,10 +15,10 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
   const segments = useSegments();
 
   return (
-    <Link href={`/${segments[0]}/orders/${order.id}`} asChild>
+    <Link href={`/${segments[0]}/orders/${order.order_id}`} asChild>
       <Pressable style={styles.container}>
         <View>
-          <Text style={styles.title}>Order #{order.id}</Text>
+          <Text style={styles.title}>Order #{order.order_id}</Text>
           <Text style={styles.time}>{dayjs(order.created_at).fromNow()}</Text>
         </View>
 

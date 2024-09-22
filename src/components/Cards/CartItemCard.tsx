@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Item } from "@/types";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { CartItem } from "@/types";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface CartItemCardProps {
-  item: CartItem;
+  item: Item; // Ensure this matches your Item structure
   onIncreaseQuantity: () => void;
   onDecreaseQuantity: () => void;
   onDelete: () => void;
@@ -16,13 +16,19 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
   onDecreaseQuantity,
   onDelete,
 }) => {
+  const { item_id, quantity, item_name, price } = item;
+
+  if (quantity <= 0) {
+    return null;
+  }
+
   return (
     <View style={styles.card}>
       <View style={styles.itemDetails}>
-        <Text style={styles.itemName}>{item.item.item_name}</Text>
-        <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+        <Text style={styles.itemName}>{item_name}</Text>
+        <Text style={styles.itemQuantity}>Quantity: {quantity}</Text>
         <Text style={styles.itemPrice}>
-          Price: ${(item.item.price * item.quantity).toFixed(2)}
+          Price: ${(price * quantity).toFixed(2)}
         </Text>
       </View>
       <View style={styles.actions}>

@@ -1,15 +1,12 @@
-import { useInsertOrderItems } from "@/api/order-items";
-import { useInsertOrder } from "@/api/orders";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
+import { useInsertOrder, useInsertOrderItems } from "@/api/orders";
 import { initialisePaymentSheet, openPaymentSheet } from "@/lib/stripe";
-import { CartItem, Tables } from "@/types";
+import { Item, Tables } from "@/types";
 import * as Crypto from "expo-crypto";
 import { router } from "expo-router";
-import { createContext, PropsWithChildren, useContext, useState } from "react";
-
-type Item = Tables<"items"> & { price: number }; // Ensure `price` is always present
 
 type CartType = {
-  items: CartItem[];
+  items: Item[];
   AddItemToCart: (item: Item) => void;
   updateQuantity: (itemId: string, amount: -1 | 1) => void;
   total: number;
@@ -27,38 +24,43 @@ const CartContext = createContext<CartType>({
 const CartProvider = ({ children }: PropsWithChildren) => {
   const { mutate: InsertOrder } = useInsertOrder();
   const { mutate: InsertOrderItems } = useInsertOrderItems();
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
 
   const AddItemToCart = (item: Item) => {
-    const existingItem = items.find((cartItem) => cartItem.item_id === item.id);
-    if (existingItem) {
-      updateQuantity(existingItem.id, 1);
-      return;
-    }
+    setItems((prevItems) => {
+      const existingItem = prevItems.find(
+        (cartItem) => cartItem.item_id === item.item_id
+      );
 
-    const newCartItem: CartItem = {
-      id: Crypto.randomUUID(),
-      item, // Store the entire item object
-      item_id: item.id,
-      quantity: 1,
-    };
-    setItems([newCartItem, ...items]);
+      if (existingItem) {
+        return prevItems.map((cartItem) =>
+          cartItem.item_id === item.item_id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 } // Increase quantity
+            : cartItem
+        );
+      }
+
+      // Add new item if it doesn't exist
+      return [...prevItems, { ...item, quantity: 1 }];
+    });
   };
 
   const updateQuantity = (itemId: string, amount: -1 | 1) => {
     setItems(
-      items
-        .map((item) =>
-          item.id !== itemId
-            ? item
-            : { ...item, quantity: item.quantity + amount }
-        )
-        .filter((item) => item.quantity > 0)
+      (prevItems) =>
+        prevItems
+          .map(
+            (item) =>
+              item.item_id !== itemId
+                ? item
+                : { ...item, quantity: item.quantity + amount } // Update quantity
+          )
+          .filter((item) => item.quantity > 0) // Remove items with zero quantity
     );
   };
 
   const total = items.reduce(
-    (sum, item) => (sum += item.item.price * item.quantity),
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
@@ -67,36 +69,25 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   const checkout = async () => {
+    if (total <= 0) return;
+
     await initialisePaymentSheet(Math.floor(total * 100));
     const paid = await openPaymentSheet();
     if (!paid) {
       return;
     }
 
-    InsertOrder(
-      { total },
-      {
-        onSuccess: saveOrderItems,
-      }
-    );
+    InsertOrder({ total }, { onSuccess: saveOrderItems });
   };
 
-  const saveOrderItems = (order: Tables<"orders">) => {
-    const orderItems = items.map((cartItem) => ({
-      order_id: order.id,
-      item_id: cartItem.item_id,
-      quantity: cartItem.quantity,
+  const saveOrderItems = (data: { order_id: string }) => {
+    const orderItems = items.map((item) => ({
+      order_id: data.order_id,
+      item_id: item.item_id,
+      quantity: item.quantity,
     }));
-
-    InsertOrderItems(orderItems, {
-      onSuccess() {
-        clearCart();
-        router.push(`/(userView)/orders/${order.id}`);
-      },
-      onError(error) {
-        console.error("Error inserting order items:", error.message);
-      },
-    });
+    InsertOrderItems(orderItems, { onSuccess: clearCart });
+    router.push(`/(userView)/orders/${data.order_id}`);
   };
 
   return (
@@ -108,5 +99,8 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
+export const useCart = () => {
+  return useContext(CartContext);
+};
+
 export default CartProvider;
-export const useCart = () => useContext(CartContext);

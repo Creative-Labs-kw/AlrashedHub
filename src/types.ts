@@ -25,14 +25,15 @@ export type Profile = {
 
 // Item type
 export type Item = {
-  id: string;
-  name: string;
-  description: string;
-  image: string | null;
+  item_id: string;
+  store_id: string | null; // Allow store_id to be null
+  item_img: string | null;
+  item_name: string;
+  item_description: string | null;
   price: number;
-  store_id: string;
-  quantity: number;
-  cart_ids: string[]; // Array of cart IDs that the item is in
+  quantity: number | null; // Array of cart IDs that the item is in
+  created_at: string | null; // Adjust type if necessary
+  updated_at: string | null; // Adjust type if necessary
 };
 
 // Store type
@@ -48,6 +49,14 @@ export type Store = {
   delivery_time: string;
   items: string[]; // List of item IDs
 };
+// ValidSegments
+export type ValidSegments =
+  | "userView"
+  | "adminView"
+  | "cart"
+  | "orders"
+  | "menu"
+  | "item";
 
 // Chat type
 export type Chat = {
@@ -89,9 +98,7 @@ export type Cart = {
 // CartItem type
 export type CartItem = {
   id: string;
-  item_id: string; // Reference to the item
-  quantity: number;
-  price: number; // Price of the item at the time of adding to the cart
+  item: Item[];
 };
 
 // Order and OrderItem types (if needed for future use)

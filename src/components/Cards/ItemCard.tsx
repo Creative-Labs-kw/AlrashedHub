@@ -2,18 +2,11 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { defaultStoreImage } from "../Lists/StoreListItem";
+import { Item } from "@/types";
 
 interface ItemCardProps {
-  item: {
-    item_id: string;
-    item_img: string;
-    item_name: string;
-    item_description: string;
-    price: string;
-    quantity: number;
-  };
+  item: Item; // Expecting the 'Item' object as a prop
 }
-
 const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
   const router = useRouter();
 
